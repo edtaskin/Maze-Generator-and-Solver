@@ -31,11 +31,11 @@ public class LazyPrimMST {
 
     private void visit(int v) {
         marked[v] = true;
-        for (Edge e : G.adj(v))
+        for (Edge e : G.adjEdges(v))
             if (!marked[e.other(v)])
                 pq.add(e);
 
     }
 
-    public Iterable<Edge> mst() { return mst; }
+    public List<Edge> mst() { return mst; }
 }

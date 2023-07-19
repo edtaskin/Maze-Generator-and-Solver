@@ -2,6 +2,7 @@ package com.example.mazesolver;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class EdgeWeightedGraph {
     private final int V;
@@ -25,7 +26,15 @@ public class EdgeWeightedGraph {
         edges.add(e);
     }
 
-    public Iterable<Edge> adj(int v) { return adj[v]; }
+    public Iterable<Edge> adjEdges(int v) { return adj[v]; }
+
+    public Iterable<Integer> adjVertices(int v) {
+        List<Integer> adjVertices = new ArrayList<>();
+        for (Edge e : adjEdges(v)) {
+            adjVertices.add(e.other(v));
+        }
+        return adjVertices;
+    }
 
     public Iterable<Edge> edges() { return edges; }
 }

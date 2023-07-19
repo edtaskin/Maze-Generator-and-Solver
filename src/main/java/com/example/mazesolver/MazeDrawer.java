@@ -4,6 +4,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeDrawer {
@@ -12,7 +14,7 @@ public class MazeDrawer {
     private Pane[][] cells;
     private int rowCount, colCount, openCellsCount;
     //private EdgeWeightedGraph G;
-    private Graph G;
+    private EdgeWeightedGraph G;
 
     public MazeDrawer(int rowCount, int colCount, int openCellsCount) {
         this.rowCount = rowCount;
@@ -37,21 +39,19 @@ public class MazeDrawer {
     public GridPane getMaze() { return maze; }
 
     /*
-    Generates a edge weighted graph of randomized edge weights where every cell is connected to all its neighbors.
+    Generates an edge weighted graph of randomized edge weights where every cell is connected to all its neighbors.
      */
-    private Graph buildGraph() {
-        Graph G = new Graph(rowCount*colCount);
+    private EdgeWeightedGraph buildGraph() {
+        EdgeWeightedGraph G = new EdgeWeightedGraph(rowCount*colCount);
         for (int v = 0; v < rowCount; v++) {
             for (int w = 0; w < colCount; w++) {
                 if (v != 0) {
-                    G.addEdge(getCellByCoordinate(v, w), getCellByCoordinate(v - 1, w));
-                    //Edge e = new Edge(getCellByCoordinate(i, j), getCellByCoordinate(i - 1, j), ThreadLocalRandom.current().nextDouble(0, 10000));
-                    //G.addEdge(e);
+                    Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v - 1, w), ThreadLocalRandom.current().nextDouble(0, 10000));
+                    G.addEdge(e);
                 }
                 if (w != 0) {
-                    G.addEdge(getCellByCoordinate(v, w), getCellByCoordinate(v, w-1));
-                    //Edge e = new Edge(getCellByCoordinate(i, j), getCellByCoordinate(i, j-1), ThreadLocalRandom.current().nextDouble(0, 10000));
-                    //G.addEdge(e);
+                    Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v, w-1), ThreadLocalRandom.current().nextDouble(0, 10000));
+                    G.addEdge(e);
                 }
             }
         }
@@ -59,28 +59,23 @@ public class MazeDrawer {
     }
 
     /*
-    Randomly marks the cells as open while the total open cells are less than the openCellsCount.
+    Randomly marks the cells as open until the maze becomes connected and the number of opened cells is at least cellsOpened given in the constructor.
      */
     private void openMazeWays() {
-        /*LazyPrimMST mst = new LazyPrimMST(G);
-        for (Edge e : mst.mst()) {
+        LazyPrimMST mst = new LazyPrimMST(G);
+        int cellsOpened = 0;
+        List<Edge> randomizedMst = mst.mst();
+        Collections.shuffle(randomizedMst);
+        for (Edge e : randomizedMst) {
+            if (cellsOpened >= openCellsCount) {
+                ConnectedComponents CC = new ConnectedComponents(G, true);
+                if (CC.isConnected()) break;
+            }
             int v = e.either();
             int w = e.other(v);
             getCellByIndex(v).setStyle("-fx-background-color: white");
             getCellByIndex(w).setStyle("-fx-background-color: white");
-        }*/
-        int divisor = 5;
-        for (int i = 0; i < openCellsCount/divisor; i++) {
-            int randomStartCell = getRandomCellIndex();
-            System.out.println(randomStartCell);
-            RandomizedDFS dfs = new RandomizedDFS(this.G, randomStartCell);
-            int cellsOpened = 0;
-            for (int v : dfs.getVisitedVertices()) {
-                if (cellsOpened < 10) {
-                    getCellByIndex(v).setStyle("-fx-background-color: white");
-                    cellsOpened++;
-                }
-            }
+            cellsOpened += 2;
         }
 
     }
