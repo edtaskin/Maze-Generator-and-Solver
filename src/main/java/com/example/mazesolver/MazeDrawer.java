@@ -62,21 +62,6 @@ public class MazeDrawer {
     Randomly marks the cells as open until the maze becomes connected and the number of opened cells is at least cellsOpened given in the constructor.
      */
     private void openMazeWays() {
-        LazyPrimMST mst = new LazyPrimMST(G);
-        int cellsOpened = 0;
-        List<Edge> randomizedMst = mst.mst();
-        Collections.shuffle(randomizedMst);
-        for (Edge e : randomizedMst) {
-            if (cellsOpened >= openCellsCount) {
-                ConnectedComponents CC = new ConnectedComponents(G, true);
-                if (CC.isConnected()) break;
-            }
-            int v = e.either();
-            int w = e.other(v);
-            getCellByIndex(v).setStyle("-fx-background-color: white");
-            getCellByIndex(w).setStyle("-fx-background-color: white");
-            cellsOpened += 2;
-        }
 
     }
 
@@ -90,13 +75,6 @@ public class MazeDrawer {
         int x = (index - y) / colCount;
         return cells[x][y];
     }
-
-//    private Node getNodeByCoordinate(double row, double col) {
-//        for (Node node : gridPane.getChildren())
-//            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col)
-//                return node;
-//        return null;
-//    }
 
     private int getRandomCellIndex() {
         return ThreadLocalRandom.current().nextInt(0, rowCount*colCount);
