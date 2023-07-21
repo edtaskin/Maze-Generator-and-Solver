@@ -4,17 +4,15 @@ import javafx.scene.layout.GridPane;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MazeDrawer {
-
+public class MazeDrawer implements Directions {
     private GridPane maze;
     private Cell[][] cells;
-    private int rowCount, colCount, openCellsCount;
+    private int rowCount, colCount;
     private EdgeWeightedGraph G;
 
-    public MazeDrawer(int rowCount, int colCount, int openCellsCount) {
+    public MazeDrawer(int rowCount, int colCount) {
         this.rowCount = rowCount;
         this.colCount = colCount;
-        this.openCellsCount = openCellsCount;
         maze = new GridPane();
         cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
@@ -41,15 +39,15 @@ public class MazeDrawer {
                     Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v - 1, w), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
                     //TODO Alttaki linelar yanlış yerde
-                    //cells[v][w].removeWall(Directions.LEFT);
-                    //cells[v-1][w].removeWall(Directions.RIGHT);
+                    //cells[v][w].removeWall(LEFT);
+                    //cells[v-1][w].removeWall(RIGHT);
                 }
                 if (w != 0) {
                     Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v, w-1), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
                     //TODO Alttaki linelar yanlış yerde
-                    //cells[v][w].removeWall(Directions.BOTTOM);
-                    //cells[v][w-1].removeWall(Directions.TOP);
+                    //cells[v][w].removeWall(BOTTOM);
+                    //cells[v][w-1].removeWall(TOP);
                 }
             }
         }
@@ -66,7 +64,6 @@ public class MazeDrawer {
     /*
     Helper methods to obtain specific cells from the maze
      */
-
 
     //TODO Incorrect name for the function, either change the function or change name to getCellIndexByCoordinate
     private int getCellByCoordinate(int x, int y) {

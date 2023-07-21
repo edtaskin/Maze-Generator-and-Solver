@@ -16,34 +16,55 @@ public class Cell implements Directions {
         //this.x = x;
         //this.y = y;
         walls = new HashMap<>();
+        pane = new Pane();
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             walls.put(side, false);
-        pane.setStyle("-fx-border-color: blue"); // Initially all walls are placed
+        pane.setStyle("-fx-border-color: black"); // Initially all walls are placed
         pane.setPrefSize(cellWidth, cellHeight);
     }
 
     public Pane getPane() { return pane; }
 
-    public void putWall(short direction) { walls.replace(direction, true); }
+    public void putWall(short direction) {
+        walls.replace(direction, true);
+        displayWalls();
+    }
 
     public void putWall(short[] directions) {
         for (short direction : directions)
             walls.replace(direction, true);
+        displayWalls();
     }
 
-    public void removeWall(short direction) { walls.replace(direction, false); }
+    public void removeWall(short direction) {
+        walls.replace(direction, false);
+        displayWalls();
+    }
 
     public void removeWall(short[] directions) {
         for (short direction : directions)
             walls.replace(direction, false);
+        displayWalls();
     }
 
-    // TODO
+    // TODO Are the styles valid?
     private void displayWalls() {
         this.pane.setStyle("-fx-border-color: none");
         for (short direction : walls.keySet()) {
-            if (walls.get(direction))
-                this.pane.setStyle("-fx-border-");
+            switch (direction) {
+                case TOP:
+                    this.pane.setStyle("-fx-border-top: 1px solid black");
+                    break;
+                case BOTTOM:
+                    this.pane.setStyle("-fx-border-bottom: 1px solid black");
+                    break;
+                case RIGHT:
+                    this.pane.setStyle("-fx-border-right: 1px solid black");
+                    break;
+                case LEFT:
+                    this.pane.setStyle("-fx-border-left: 1px solid black");
+                    break;
+            }
         }
     }
 

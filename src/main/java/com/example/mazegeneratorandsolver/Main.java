@@ -14,11 +14,11 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         BorderPane root = new BorderPane();
 
-        MazeDrawer mazeDrawer = new MazeDrawer(rowCount, colCount, rowCount*colCount/4);
+        MazeDrawer mazeDrawer = new MazeDrawer(rowCount, colCount);
         root.setCenter(mazeDrawer.getMaze());
 
         Scene scene = new Scene(root);
-        stage.setTitle("Maze Solver");
+        stage.setTitle("Maze Generator & Solver");
         stage.setScene(scene);
         stage.show();
     }
