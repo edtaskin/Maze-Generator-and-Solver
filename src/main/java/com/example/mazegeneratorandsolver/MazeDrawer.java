@@ -61,8 +61,11 @@ public class MazeDrawer implements Directions {
      */
     private void openMazeWays() {
         // TEST
+        Cell endingCell = cells[rowCount - 1][colCount - 1];
+        Cell currentCell = cells[0][0]; // Initially equal to the staring cell
         for (int i = 0; i < 20; i++) {
-            Cell randomCell = getRandomCell();
+            Cell randomCell = getRandomNeighbouringCell(currentCell);
+            connectCells(currentCell, randomCell);
         }
     }
 
@@ -87,7 +90,6 @@ public class MazeDrawer implements Directions {
     }
 
     private Cell getRandomNeighbouringCell(Cell cell) {
-        // TODO
         List<Short> validDirections = new ArrayList<>();
         if (cell.getX() != 0)
             validDirections.add(TOP);
@@ -110,7 +112,30 @@ public class MazeDrawer implements Directions {
         Does it matter?
         - ???
          */
+    }
 
+    private void connectCells(Cell cell1, Cell cell2) {
+        assert cell1 != cell2;
+        if (cell1.getX() == cell1.getX()) {
+            if (cell1.getY() > cell2.getY()) {
+                cell1.removeWall(BOTTOM);
+                cell2.removeWall(TOP);
+            }
+            else {
+                cell1.removeWall(TOP);
+                cell2.removeWall(BOTTOM);
+            }
+        }
+        else if (cell1.getY() == cell2.getY()) {
+            if (cell1.getX() > cell2.getX()) {
+                cell1.removeWall(LEFT);
+                cell2.removeWall(RIGHT);
+            }
+            else {
+                cell1.removeWall(RIGHT);
+                cell2.removeWall(LEFT);
+            }
+        }
     }
 
 

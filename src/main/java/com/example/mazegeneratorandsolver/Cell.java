@@ -32,6 +32,7 @@ public class Cell implements Directions {
         displayWalls();
     }
 
+    // TODO Is it possible to replace short with the interface type, Directions?
     public void putWall(short[] directions) {
         for (short direction : directions)
             walls.replace(direction, true);
