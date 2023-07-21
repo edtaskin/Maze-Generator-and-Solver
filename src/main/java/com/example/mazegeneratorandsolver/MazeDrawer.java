@@ -2,6 +2,8 @@ package com.example.mazegeneratorandsolver;
 
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeDrawer implements Directions {
@@ -17,7 +19,7 @@ public class MazeDrawer implements Directions {
         cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j =0; j < colCount; j++) {
-                Cell cell = new Cell();
+                Cell cell = new Cell(i, j);
                 maze.add(cell.getPane(), i, j);
                 cells[i][j] = cell;
             }
@@ -58,7 +60,10 @@ public class MazeDrawer implements Directions {
     Randomly marks the cells as open until TODO
      */
     private void openMazeWays() {
-
+        // TEST
+        for (int i = 0; i < 20; i++) {
+            Cell randomCell = getRandomCell();
+        }
     }
 
     /*
@@ -80,5 +85,33 @@ public class MazeDrawer implements Directions {
         int randomIndex = ThreadLocalRandom.current().nextInt(0, rowCount*colCount);
         return getCellByIndex(randomIndex);
     }
+
+    private Cell getRandomNeighbouringCell(Cell cell) {
+        // TODO
+        List<Short> validDirections = new ArrayList<>();
+        if (cell.getX() != 0)
+            validDirections.add(TOP);
+        if (cell.getX() != rowCount)
+            validDirections.add(BOTTOM);
+        if (cell.getY() != 0)
+            validDirections.add(RIGHT);
+        if (cell.getY() != colCount)
+            validDirections.add(LEFT);
+        int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
+        return getCellByIndex(randomIndex);
+        /*
+        TODO Alternative:
+        - Hold a static variable of directions [TOP, BOTTOM, RIGHT, LEFT]
+        - Randomly select one direction
+        - Create an assertion method to check if direction is valid (0 <= x < rowCount, 0 <= y < colCount)
+        - Randomly select another direction until a valid one is found.
+        Is it more efficient?
+        - Memory-wise, YES.
+        Does it matter?
+        - ???
+         */
+
+    }
+
 
 }

@@ -9,12 +9,12 @@ public class Cell implements Directions {
     private static final int cellWidth = 30, cellHeight = 30;
 
     private Map<Short, Boolean> walls;
-    //private final int x, y;
+    private final int x, y;
     private Pane pane;
 
-    public Cell(/*int x, int y*/) {
-        //this.x = x;
-        //this.y = y;
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
         walls = new HashMap<>();
         pane = new Pane();
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
@@ -23,6 +23,8 @@ public class Cell implements Directions {
         pane.setPrefSize(cellWidth, cellHeight);
     }
 
+    public int getX() { return x; }
+    public int getY() { return y; }
     public Pane getPane() { return pane; }
 
     public void putWall(short direction) {
