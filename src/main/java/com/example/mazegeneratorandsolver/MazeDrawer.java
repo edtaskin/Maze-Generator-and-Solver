@@ -40,10 +40,16 @@ public class MazeDrawer implements Directions {
                 if (v != 0) {
                     Edge e = new Edge(getCellIndexByCoordinate(v, w), getCellIndexByCoordinate(v - 1, w), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
+                    //TODO Alttaki linelar yanlış yerde
+                    //cells[v][w].removeWall(LEFT);
+                    //cells[v-1][w].removeWall(RIGHT);
                 }
                 if (w != 0) {
                     Edge e = new Edge(getCellIndexByCoordinate(v, w), getCellIndexByCoordinate(v, w-1), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
+                    //TODO Alttaki linelar yanlış yerde
+                    //cells[v][w].removeWall(BOTTOM);
+                    //cells[v][w-1].removeWall(TOP);
                 }
             }
         }
@@ -51,10 +57,10 @@ public class MazeDrawer implements Directions {
     }
 
     /*
-    Randomly marks the cells as open until the start and end of the maze is connected.
+    Randomly marks the cells as open until TODO
      */
     private void openMazeWays() {
-        // TODO
+        // TEST
         Cell endingCell = cells[rowCount - 1][colCount - 1];
         Cell currentCell = cells[0][0]; // Initially equal to the staring cell
         for (int i = 0; i < 20; i++) {
@@ -100,23 +106,14 @@ public class MazeDrawer implements Directions {
         - Hold a static variable of directions [TOP, BOTTOM, RIGHT, LEFT]
         - Randomly select one direction
         - Create an assertion method to check if direction is valid (0 <= x < rowCount, 0 <= y < colCount)
-             private boolean assertValidNeighbour(int x, int y) {
-                    return (x >= 0 && x < rowCount && y >= 0 && y < colCount);
-            }
         - Randomly select another direction until a valid one is found.
         Is it more efficient?
         - Memory-wise, YES.
-        - Time-wise ???
         Does it matter?
         - ???
          */
-
     }
 
-
-    /*
-    Connects the two input Cells by removing the wall between them.
-     */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
         if (cell1.getX() == cell1.getX()) {
