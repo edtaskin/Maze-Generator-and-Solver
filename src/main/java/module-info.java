@@ -3,6 +3,6 @@ module com.example.mazesolver {
     requires javafx.fxml;
 
 
-    opens com.example.mazesolver to javafx.fxml;
-    exports com.example.mazesolver;
+    opens com.example.mazegeneratorandsolver to javafx.fxml;
+    exports com.example.mazegeneratorandsolver;
 }

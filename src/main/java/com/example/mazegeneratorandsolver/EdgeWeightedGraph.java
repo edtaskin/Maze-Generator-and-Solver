@@ -1,6 +1,7 @@
-package com.example.mazesolver;
+package com.example.mazegeneratorandsolver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,12 +9,13 @@ public class EdgeWeightedGraph {
     private final int V;
     private final LinkedList<Edge>[] adj; // Holds "edges" connected to vertex.
     private final ArrayList<Edge> edges;
+
     public EdgeWeightedGraph(int V) {
         this.V = V;
         edges = new ArrayList<>();
         adj = (LinkedList<Edge>[]) new LinkedList[V];
-        for (int v = 0; v < V; v++)
-            adj[v] = new LinkedList<Edge>();
+        for (int i = 0; i < V; i++)
+            adj[i] = new LinkedList<>();
     }
 
     public int V() { return V; }

@@ -1,19 +1,14 @@
-package com.example.mazesolver;
+package com.example.mazegeneratorandsolver;
 
-import javafx.geometry.Point2D;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeDrawer {
-    private static final int cellWidth = 30, cellHeight = 30;
+
     private GridPane maze;
-    private Pane[][] cells;
+    private Cell[][] cells;
     private int rowCount, colCount, openCellsCount;
-    //private EdgeWeightedGraph G;
     private EdgeWeightedGraph G;
 
     public MazeDrawer(int rowCount, int colCount, int openCellsCount) {
@@ -21,14 +16,11 @@ public class MazeDrawer {
         this.colCount = colCount;
         this.openCellsCount = openCellsCount;
         maze = new GridPane();
-        cells = new Pane[rowCount][colCount];
+        cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j =0; j < colCount; j++) {
-                Pane cell = new Pane();
-                cell.setStyle("-fx-background-color: black"); // Initially all cells are walls
-                //cell.setStyle("-fx-border-color: blue");
-                cell.setPrefSize(cellWidth, cellHeight);
-                maze.add(cell, i, j);
+                Cell cell = new Cell();
+                maze.add(cell.getPane(), i, j);
                 cells[i][j] = cell;
             }
         }
@@ -48,10 +40,16 @@ public class MazeDrawer {
                 if (v != 0) {
                     Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v - 1, w), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
+                    //TODO Alttaki linelar yanlış yerde
+                    //cells[v][w].removeWall(Directions.LEFT);
+                    //cells[v-1][w].removeWall(Directions.RIGHT);
                 }
                 if (w != 0) {
                     Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v, w-1), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
+                    //TODO Alttaki linelar yanlış yerde
+                    //cells[v][w].removeWall(Directions.BOTTOM);
+                    //cells[v][w-1].removeWall(Directions.TOP);
                 }
             }
         }
@@ -59,25 +57,32 @@ public class MazeDrawer {
     }
 
     /*
-    Randomly marks the cells as open until the maze becomes connected and the number of opened cells is at least cellsOpened given in the constructor.
+    Randomly marks the cells as open until TODO
      */
     private void openMazeWays() {
 
     }
 
+    /*
+    Helper methods to obtain specific cells from the maze
+     */
+
+
+    //TODO Incorrect name for the function, either change the function or change name to getCellIndexByCoordinate
     private int getCellByCoordinate(int x, int y) {
         return x * colCount + y;
     }
 
     // TODO Test correctness
-    private Pane getCellByIndex(int index) {
+    private Cell getCellByIndex(int index) {
         int y = index % colCount;
         int x = (index - y) / colCount;
         return cells[x][y];
     }
 
-    private int getRandomCellIndex() {
-        return ThreadLocalRandom.current().nextInt(0, rowCount*colCount);
+    private Cell getRandomCell() {
+        int randomIndex = ThreadLocalRandom.current().nextInt(0, rowCount*colCount);
+        return getCellByIndex(randomIndex);
     }
 
 }

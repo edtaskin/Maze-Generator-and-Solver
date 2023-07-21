@@ -1,4 +1,4 @@
-package com.example.mazesolver;
+package com.example.mazegeneratorandsolver;
 
 public class Edge implements Comparable<Edge> {
     private final int v, w;
@@ -24,8 +24,6 @@ public class Edge implements Comparable<Edge> {
     // Compare edges by their weights
     @Override
     public int compareTo(Edge that) {
-        if (this.weight < that.weight)      return -1;
-        else if (this.weight > that.weight) return 1;
-        else return 0;
+        return Double.compare(this.weight, that.weight);
     }
 }
