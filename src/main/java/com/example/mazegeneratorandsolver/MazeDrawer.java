@@ -65,7 +65,6 @@ public class MazeDrawer implements Directions {
     Helper methods to fetch specific cells from the maze
      */
 
-    //TODO Incorrect name for the function, either change the function or change name to getCellIndexByCoordinate
     private int getCellIndexByCoordinate(int x, int y) {
         return x * colCount + y;
     }
