@@ -36,14 +36,14 @@ public class MazeDrawer implements Directions {
         for (int v = 0; v < rowCount; v++) {
             for (int w = 0; w < colCount; w++) {
                 if (v != 0) {
-                    Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v - 1, w), ThreadLocalRandom.current().nextDouble(0, 10000));
+                    Edge e = new Edge(getCellIndexByCoordinate(v, w), getCellIndexByCoordinate(v - 1, w), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
                     //TODO Alttaki linelar yanlış yerde
                     //cells[v][w].removeWall(LEFT);
                     //cells[v-1][w].removeWall(RIGHT);
                 }
                 if (w != 0) {
-                    Edge e = new Edge(getCellByCoordinate(v, w), getCellByCoordinate(v, w-1), ThreadLocalRandom.current().nextDouble(0, 10000));
+                    Edge e = new Edge(getCellIndexByCoordinate(v, w), getCellIndexByCoordinate(v, w-1), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
                     //TODO Alttaki linelar yanlış yerde
                     //cells[v][w].removeWall(BOTTOM);
@@ -62,11 +62,11 @@ public class MazeDrawer implements Directions {
     }
 
     /*
-    Helper methods to obtain specific cells from the maze
+    Helper methods to fetch specific cells from the maze
      */
 
     //TODO Incorrect name for the function, either change the function or change name to getCellIndexByCoordinate
-    private int getCellByCoordinate(int x, int y) {
+    private int getCellIndexByCoordinate(int x, int y) {
         return x * colCount + y;
     }
 
