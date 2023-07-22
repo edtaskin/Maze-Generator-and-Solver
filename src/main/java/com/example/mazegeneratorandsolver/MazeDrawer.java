@@ -58,8 +58,10 @@ public class MazeDrawer implements Directions {
         Cell endingCell = cells[rowCount - 1][colCount - 1];
         Cell currentCell = cells[0][0]; // Initially equal to the staring cell
         for (int i = 0; i < 20; i++) {
+            System.out.println(currentCell.toString());
             Cell randomCell = getRandomNeighbouringCell(currentCell);
             connectCells(currentCell, randomCell);
+            currentCell = randomCell;
         }
     }
 
@@ -94,7 +96,8 @@ public class MazeDrawer implements Directions {
         if (cell.getY() != colCount)
             validDirections.add(LEFT);
         int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
-        return getCellByIndex(randomIndex);
+        short randomDirection = validDirections.get(randomIndex);
+        return getNeighbourByDirection(cell, randomDirection);
         /*
         TODO Alternative:
         - Hold a static variable of directions [TOP, BOTTOM, RIGHT, LEFT]
@@ -111,6 +114,34 @@ public class MazeDrawer implements Directions {
         - ???
          */
 
+    }
+
+    private Cell getNeighbourByDirection(Cell cell, short direction) {
+        assert direction < 4;
+        int deltaX = 0;
+        int deltaY = 0;
+        switch (direction) {
+            case TOP:
+                deltaY = -1;
+                break;
+            case BOTTOM:
+                deltaY = 1;
+                break;
+            case RIGHT:
+                deltaX = 1;
+                break;
+            case LEFT:
+                deltaX = -1;
+                break;
+        }
+        if (!assertValidCell(cell.getX() + deltaX, cell.getY() + deltaY))
+            throw new ArrayIndexOutOfBoundsException(String.format("(%d, %d) is not a valid cell.", cell.getX() + deltaX, cell.getY() + deltaY));
+        else
+            return cells[cell.getX() + deltaX][cell.getY() + deltaY];
+    }
+
+    private boolean assertValidCell(int x, int y) {
+        return (x >= 0 && x < rowCount && y >= 0 && y < colCount);
     }
 
 

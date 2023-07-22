@@ -18,8 +18,8 @@ public class Cell implements Directions {
         walls = new HashMap<>();
         pane = new Pane();
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
-            walls.put(side, false);
-        pane.setStyle("-fx-border-color: black"); // Initially all walls are placed
+            walls.put(side, true); // Initially all walls are placed
+        pane.setStyle("-fx-border-color: black");
         pane.setPrefSize(cellWidth, cellHeight);
     }
 
@@ -53,22 +53,34 @@ public class Cell implements Directions {
     // TODO Are the styles valid?
     private void displayWalls() {
         this.pane.setStyle("-fx-border-color: none");
+        String borderStyle = "-fx-border-color: red;"; // top, right, bottom, left
         for (short direction : walls.keySet()) {
             switch (direction) {
                 case TOP:
-                    this.pane.setStyle("-fx-border-top: 1px solid black");
+                    this.pane.setStyle(borderStyle + "-fx-border-width: 1px 0px 0px 0px;");
                     break;
                 case BOTTOM:
-                    this.pane.setStyle("-fx-border-bottom: 1px solid black");
+                    this.pane.setStyle(borderStyle + "-fx-border-width: 0px 0px 1px 0px;");
                     break;
                 case RIGHT:
-                    this.pane.setStyle("-fx-border-right: 1px solid black");
+                    this.pane.setStyle(borderStyle + "-fx-border-width: 0px 1px 0px 0px;");
                     break;
                 case LEFT:
-                    this.pane.setStyle("-fx-border-left: 1px solid black");
+                    this.pane.setStyle(borderStyle + "-fx-border-width: 0px 0px 0px 1px;");
                     break;
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder(String.format("x: %d, y: %d, Walls: [", x, y));
+        for (short direction : walls.keySet())
+            if (walls.get(direction)) {
+                res.append(direction).append(" ");
+            }
+        res.append("]");
+        return String.valueOf(res);
     }
 
 
