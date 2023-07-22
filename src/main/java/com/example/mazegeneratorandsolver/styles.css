@@ -1,0 +1,31 @@
+.cell {
+    -fx-border-color: red;
+}
+
+.filled {
+    -fx-background-color: black;
+}
+
+.opened {
+    -fx-background-color: blue;
+}
+
+.top {
+    -fx-border-top-width: 1px;
+}
+
+.bottom {
+    -fx-border-bottom-width: 1px;
+}
+
+.right {
+    -fx-border-right-width: 1px;
+}
+
+.left {
+    -fx-border-left-width: 1px;
+}
+
+
+
+
