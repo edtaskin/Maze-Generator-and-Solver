@@ -2,9 +2,10 @@
     -fx-border-color: red;
 }
 
-.filled {
+.cell .filled {
     -fx-background-color: black;
 }
+
 
 .opened {
     -fx-background-color: blue;

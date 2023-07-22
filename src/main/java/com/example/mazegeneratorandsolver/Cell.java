@@ -8,7 +8,7 @@ import java.util.Map;
 public class Cell implements Directions {
     private static final int cellWidth = 30, cellHeight = 30;
 
-    private Map<Short, Boolean> walls;
+    private Map<Short, Boolean> walls; // TODO Is it functional?
     private final int row, col;
     private Pane pane;
 
@@ -19,7 +19,12 @@ public class Cell implements Directions {
         pane = new Pane();
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             walls.put(side, true); // Initially all walls are placed
+        pane.getStyleClass().add("cell");
         pane.getStyleClass().add("filled");
+        pane.getStyleClass().add("top");
+        pane.getStyleClass().add("bottom");
+        pane.getStyleClass().add("left");
+        pane.getStyleClass().add("right");
         pane.setPrefSize(cellWidth, cellHeight);
     }
 
@@ -27,11 +32,18 @@ public class Cell implements Directions {
     public int getCol() { return col; }
     public Pane getPane() { return pane; }
 
-    public void openCell() {
+    public void openCell(short direction) {
         pane.getStyleClass().remove("filled");
-        pane.getStyleClass().add("opened");
+        if (!pane.getStyleClass().contains("opened"))
+            pane.getStyleClass().add("opened");
+        walls.replace(direction, false);
+        System.out.println("-----");
+        System.out.println(this.toString());
+        System.out.println(pane.getStyleClass().toString());
+        displayWalls();
     }
 
+    /*
     public void putWall(short direction) {
         walls.replace(direction, true);
         displayWalls();
@@ -53,26 +65,17 @@ public class Cell implements Directions {
             walls.replace(direction, false);
         displayWalls();
     }
+    */
 
     // TODO Are the styles valid?
     private void displayWalls() {
-        this.pane.setStyle("-fx-border-color: none");
-        String borderStyle = "-fx-border-color: red;"; // top, right, bottom, left
         for (short direction : walls.keySet()) {
-            switch (direction) {
-                case TOP:
-                    this.pane.setStyle(borderStyle + "-fx-border-width: 1px 0px 0px 0px;");
-                    break;
-                case BOTTOM:
-                    this.pane.setStyle(borderStyle + "-fx-border-width: 0px 0px 1px 0px;");
-                    break;
-                case RIGHT:
-                    this.pane.setStyle(borderStyle + "-fx-border-width: 0px 1px 0px 0px;");
-                    break;
-                case LEFT:
-                    this.pane.setStyle(borderStyle + "-fx-border-width: 0px 0px 0px 1px;");
-                    break;
+            if (walls.get(direction)) {
+                if (!pane.getStyleClass().contains(DirectionsUtils.toString(direction)))
+                    pane.getStyleClass().add(DirectionsUtils.toString(direction));
             }
+            else
+                pane.getStyleClass().remove(DirectionsUtils.toString(direction));
         }
     }
 
@@ -83,9 +86,9 @@ public class Cell implements Directions {
         for (short direction : walls.keySet()) {
             if (walls.get(direction)) {
                 if (i != walls.keySet().size() - 1)
-                    res.append(Directions.toString(direction)).append(", ");
+                    res.append(DirectionsUtils.toString(direction)).append(", ");
                 else
-                    res.append(Directions.toString(direction));
+                    res.append(DirectionsUtils.toString(direction));
             }
             i++;
         }

@@ -61,7 +61,7 @@ public class MazeDrawer implements Directions {
         Cell currentCell = cells[0][0]; // Initially equal to the staring cell
         //for (int i = 0; i < 200; i++) {
         while (currentCell != endingCell) {
-            System.out.println(currentCell.toString());
+            //System.out.println(currentCell.toString());
             Cell randomCell = getRandomNeighbouringCell(currentCell);
             connectCells(currentCell, randomCell);
             currentCell = randomCell;
@@ -100,7 +100,6 @@ public class MazeDrawer implements Directions {
             validDirections.add(RIGHT);
         int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
         short randomDirection = validDirections.get(randomIndex);
-        System.out.println(validDirections.toString());
         return getNeighbourByDirection(cell, randomDirection);
         /*
         TODO Alternative:
@@ -156,26 +155,24 @@ public class MazeDrawer implements Directions {
         assert cell1 != cell2;
         if (cell1.getRow() == cell1.getRow()) {
             if (cell1.getCol() > cell2.getCol()) {
-                cell1.removeWall(LEFT);
-                cell2.removeWall(RIGHT);
+                cell1.openCell(LEFT);
+                cell2.openCell(RIGHT);
             }
             else {
-                cell1.removeWall(RIGHT);
-                cell2.removeWall(LEFT);
+                cell1.openCell(RIGHT);
+                cell2.openCell(LEFT);
             }
         }
         else if (cell1.getCol() == cell2.getCol()) {
             if (cell1.getRow() > cell2.getRow()) {
-                cell1.removeWall(TOP);
-                cell2.removeWall(BOTTOM);
+                cell1.openCell(TOP);
+                cell2.openCell(BOTTOM);
             }
             else {
-                cell1.removeWall(BOTTOM);
-                cell2.removeWall(TOP);
+                cell1.openCell(BOTTOM);
+                cell2.openCell(TOP);
             }
         }
-        cell1.openCell();
-        cell2.openCell();
     }
 
 
