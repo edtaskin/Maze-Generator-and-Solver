@@ -22,7 +22,7 @@ public class MazeDrawer implements Directions {
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < colCount; j++) {
                 Cell cell = new Cell(i, j);
-                maze.add(cell.getPane(), i, j);
+                maze.add(cell.getPane(), j, i);
                 cells[i][j] = cell;
             }
         }
@@ -153,6 +153,7 @@ public class MazeDrawer implements Directions {
      */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
+        System.out.println(String.format("Connecting cells (%s) and (%s)", cell1, cell2));
         if (cell1.getRow() == cell1.getRow()) {
             if (cell1.getCol() > cell2.getCol()) {
                 cell1.openCell(LEFT);

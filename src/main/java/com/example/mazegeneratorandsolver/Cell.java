@@ -17,6 +17,7 @@ public class Cell implements Directions {
         this.col = col;
         walls = new HashMap<>();
         pane = new Pane();
+        pane.setOnMouseClicked(event -> System.out.println(pane.getStyleClass().toString()));
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             walls.put(side, true); // Initially all walls are placed
         pane.getStyleClass().add("cell");
@@ -37,10 +38,12 @@ public class Cell implements Directions {
         if (!pane.getStyleClass().contains("opened"))
             pane.getStyleClass().add("opened");
         walls.replace(direction, false);
+        displayWalls();
+        /*
         System.out.println("-----");
         System.out.println(this.toString());
         System.out.println(pane.getStyleClass().toString());
-        displayWalls();
+        */
     }
 
     /*
@@ -81,7 +84,7 @@ public class Cell implements Directions {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("x: %d, y: %d, Walls: [", row, col));
+        StringBuilder res = new StringBuilder(String.format("Row: %d, Col: %d, Walls: [", row, col));
         int i = 0;
         for (short direction : walls.keySet()) {
             if (walls.get(direction)) {
