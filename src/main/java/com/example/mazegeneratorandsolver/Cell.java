@@ -79,10 +79,16 @@ public class Cell implements Directions {
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder(String.format("x: %d, y: %d, Walls: [", row, col));
-        for (short direction : walls.keySet())
+        int i = 0;
+        for (short direction : walls.keySet()) {
             if (walls.get(direction)) {
-                res.append(direction).append(" ");
+                if (i != walls.keySet().size() - 1)
+                    res.append(Directions.toString(direction)).append(", ");
+                else
+                    res.append(Directions.toString(direction));
             }
+            i++;
+        }
         res.append("]");
         return String.valueOf(res);
     }

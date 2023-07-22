@@ -20,7 +20,7 @@ public class MazeDrawer implements Directions {
         maze = new GridPane();
         cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
-            for (int j =0; j < colCount; j++) {
+            for (int j = 0; j < colCount; j++) {
                 Cell cell = new Cell(i, j);
                 maze.add(cell.getPane(), i, j);
                 cells[i][j] = cell;
@@ -100,7 +100,7 @@ public class MazeDrawer implements Directions {
             validDirections.add(RIGHT);
         int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
         short randomDirection = validDirections.get(randomIndex);
-        System.out.println(randomDirection);
+        System.out.println(Directions.toString(randomDirection));
         return getNeighbourByDirection(cell, randomDirection);
         /*
         TODO Alternative:

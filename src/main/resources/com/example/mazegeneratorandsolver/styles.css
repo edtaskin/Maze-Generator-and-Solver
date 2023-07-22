@@ -18,13 +18,15 @@
     -fx-border-bottom-width: 1px;
 }
 
+.left {
+    -fx-border-left-width: 1px;
+}
+
 .right {
     -fx-border-right-width: 1px;
 }
 
-.left {
-    -fx-border-left-width: 1px;
-}
+
 
 
 
