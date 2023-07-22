@@ -1,22 +1,30 @@
 package com.example.mazegeneratorandsolver;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cell implements Directions {
-    private static final int cellWidth = 30, cellHeight = 30;
+    private static final int CELL_WIDTH = 30, CELL_HEIGHT = 30;
+    private static final Duration FILL_DURATION = Duration.seconds(2);
 
-    private Map<Short, Boolean> walls; // TODO Is it functional?
+    private Map<Short, Boolean> walls;
     private final int row, col;
     private Pane pane;
+    //private Rectangle fillRectangle;
 
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
         walls = new HashMap<>();
         pane = new Pane();
+        //fillRectangle = new Rectangle();
+        //pane.getChildren().add(fillRectangle);
+
         pane.setOnMouseClicked(event -> System.out.println(pane.getStyleClass().toString()));
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             walls.put(side, true); // Initially all walls are placed
@@ -26,17 +34,50 @@ public class Cell implements Directions {
         pane.getStyleClass().add("bottom");
         pane.getStyleClass().add("left");
         pane.getStyleClass().add("right");
-        pane.setPrefSize(cellWidth, cellHeight);
+        pane.setPrefSize(CELL_WIDTH, CELL_HEIGHT);
     }
 
     public int getRow() { return row; }
     public int getCol() { return col; }
     public Pane getPane() { return pane; }
 
+    private TranslateTransition getFillAnimation(short fillTo) {
+        Rectangle fillRectangle = null;
+        TranslateTransition fillAnimation = null;
+        switch (fillTo) {
+            case TOP:
+                fillRectangle = new Rectangle(0, CELL_HEIGHT, CELL_WIDTH, 0);
+                fillAnimation = new TranslateTransition(FILL_DURATION, fillRectangle);
+                fillAnimation.setToY(-CELL_HEIGHT);
+                break;
+            case BOTTOM:
+                fillRectangle = new Rectangle(0, 0, CELL_WIDTH, 0);
+                fillAnimation = new TranslateTransition(FILL_DURATION, fillRectangle);
+                fillAnimation.setToY(CELL_HEIGHT);
+                break;
+            case LEFT:
+                fillRectangle = new Rectangle(CELL_WIDTH, 0, 0, CELL_HEIGHT);
+                fillAnimation = new TranslateTransition(FILL_DURATION, fillRectangle);
+                fillAnimation.setToX(-CELL_WIDTH);
+                break;
+            case RIGHT:
+                fillRectangle = new Rectangle(0, 0, 0, CELL_HEIGHT);
+                fillAnimation = new TranslateTransition(FILL_DURATION, fillRectangle);
+                fillAnimation.setToX(CELL_WIDTH);
+                break;
+            default:
+                throw new IllegalArgumentException("No such direction");
+        }
+        pane.getChildren().add(fillRectangle);
+        return fillAnimation;
+    }
+
+    // TODO playAnimation?
+
     public void openCell(short direction) {
         pane.getStyleClass().remove("filled");
-        if (!pane.getStyleClass().contains("opened"))
-            pane.getStyleClass().add("opened");
+        /*if (!pane.getStyleClass().contains("opened"))
+            pane.getStyleClass().add("opened");*/
         walls.replace(direction, false);
         displayWalls();
         /*
