@@ -92,15 +92,15 @@ public class MazeDrawer implements Directions {
         List<Short> validDirections = new ArrayList<>();
         if (cell.getRow() != 0)
             validDirections.add(TOP);
-        if (cell.getRow() != rowCount)
+        if (cell.getRow() != rowCount - 1)
             validDirections.add(BOTTOM);
         if (cell.getCol() != 0)
             validDirections.add(LEFT);
-        if (cell.getCol() != colCount)
+        if (cell.getCol() != colCount - 1)
             validDirections.add(RIGHT);
         int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
         short randomDirection = validDirections.get(randomIndex);
-        System.out.println(Directions.toString(randomDirection));
+        System.out.println(validDirections.toString());
         return getNeighbourByDirection(cell, randomDirection);
         /*
         TODO Alternative:
