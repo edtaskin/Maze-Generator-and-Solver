@@ -9,30 +9,34 @@ public class Cell implements Directions {
     private static final int cellWidth = 30, cellHeight = 30;
 
     private Map<Short, Boolean> walls;
-    private final int x, y;
+    private final int row, col;
     private Pane pane;
 
-    public Cell(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Cell(int row, int col) {
+        this.row = row;
+        this.col = col;
         walls = new HashMap<>();
         pane = new Pane();
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             walls.put(side, true); // Initially all walls are placed
-        pane.setStyle("-fx-border-color: black");
+        pane.getStyleClass().add("filled");
         pane.setPrefSize(cellWidth, cellHeight);
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
+    public int getRow() { return row; }
+    public int getCol() { return col; }
     public Pane getPane() { return pane; }
+
+    public void openCell() {
+        pane.getStyleClass().remove("filled");
+        pane.getStyleClass().add("opened");
+    }
 
     public void putWall(short direction) {
         walls.replace(direction, true);
         displayWalls();
     }
 
-    // TODO Is it possible to replace short with the interface type, Directions?
     public void putWall(short[] directions) {
         for (short direction : directions)
             walls.replace(direction, true);
@@ -74,7 +78,7 @@ public class Cell implements Directions {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("x: %d, y: %d, Walls: [", x, y));
+        StringBuilder res = new StringBuilder(String.format("x: %d, y: %d, Walls: [", row, col));
         for (short direction : walls.keySet())
             if (walls.get(direction)) {
                 res.append(direction).append(" ");

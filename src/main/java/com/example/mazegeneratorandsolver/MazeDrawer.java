@@ -1,5 +1,6 @@
 package com.example.mazegeneratorandsolver;
 
+import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
@@ -12,7 +13,8 @@ public class MazeDrawer implements Directions {
     private int rowCount, colCount;
     private EdgeWeightedGraph G;
 
-    public MazeDrawer(int rowCount, int colCount) {
+    public MazeDrawer(Scene scene, int rowCount, int colCount) {
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         this.rowCount = rowCount;
         this.colCount = colCount;
         maze = new GridPane();
@@ -57,7 +59,8 @@ public class MazeDrawer implements Directions {
         // TODO
         Cell endingCell = cells[rowCount - 1][colCount - 1];
         Cell currentCell = cells[0][0]; // Initially equal to the staring cell
-        for (int i = 0; i < 20; i++) {
+        //for (int i = 0; i < 200; i++) {
+        while (currentCell != endingCell) {
             System.out.println(currentCell.toString());
             Cell randomCell = getRandomNeighbouringCell(currentCell);
             connectCells(currentCell, randomCell);
@@ -87,16 +90,17 @@ public class MazeDrawer implements Directions {
 
     private Cell getRandomNeighbouringCell(Cell cell) {
         List<Short> validDirections = new ArrayList<>();
-        if (cell.getX() != 0)
+        if (cell.getRow() != 0)
             validDirections.add(TOP);
-        if (cell.getX() != rowCount)
+        if (cell.getRow() != rowCount)
             validDirections.add(BOTTOM);
-        if (cell.getY() != 0)
-            validDirections.add(RIGHT);
-        if (cell.getY() != colCount)
+        if (cell.getCol() != 0)
             validDirections.add(LEFT);
+        if (cell.getCol() != colCount)
+            validDirections.add(RIGHT);
         int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
         short randomDirection = validDirections.get(randomIndex);
+        System.out.println(randomDirection);
         return getNeighbourByDirection(cell, randomDirection);
         /*
         TODO Alternative:
@@ -118,26 +122,26 @@ public class MazeDrawer implements Directions {
 
     private Cell getNeighbourByDirection(Cell cell, short direction) {
         assert direction < 4;
-        int deltaX = 0;
-        int deltaY = 0;
+        int deltaRow = 0;
+        int deltaCol = 0;
         switch (direction) {
             case TOP:
-                deltaY = -1;
+                deltaRow = -1;
                 break;
             case BOTTOM:
-                deltaY = 1;
+                deltaRow = 1;
                 break;
             case RIGHT:
-                deltaX = 1;
+                deltaCol = 1;
                 break;
             case LEFT:
-                deltaX = -1;
+                deltaCol = -1;
                 break;
         }
-        if (!assertValidCell(cell.getX() + deltaX, cell.getY() + deltaY))
-            throw new ArrayIndexOutOfBoundsException(String.format("(%d, %d) is not a valid cell.", cell.getX() + deltaX, cell.getY() + deltaY));
+        if (!assertValidCell(cell.getRow() + deltaRow, cell.getCol() + deltaCol))
+            throw new ArrayIndexOutOfBoundsException(String.format("(%d, %d) is not a valid neighbour of (%d, %d).", cell.getRow() + deltaRow, cell.getCol() + deltaCol, cell.getRow(), cell.getCol()));
         else
-            return cells[cell.getX() + deltaX][cell.getY() + deltaY];
+            return cells[cell.getRow() + deltaRow][cell.getCol() + deltaCol];
     }
 
     private boolean assertValidCell(int x, int y) {
@@ -150,18 +154,8 @@ public class MazeDrawer implements Directions {
      */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
-        if (cell1.getX() == cell1.getX()) {
-            if (cell1.getY() > cell2.getY()) {
-                cell1.removeWall(BOTTOM);
-                cell2.removeWall(TOP);
-            }
-            else {
-                cell1.removeWall(TOP);
-                cell2.removeWall(BOTTOM);
-            }
-        }
-        else if (cell1.getY() == cell2.getY()) {
-            if (cell1.getX() > cell2.getX()) {
+        if (cell1.getRow() == cell1.getRow()) {
+            if (cell1.getCol() > cell2.getCol()) {
                 cell1.removeWall(LEFT);
                 cell2.removeWall(RIGHT);
             }
@@ -170,6 +164,18 @@ public class MazeDrawer implements Directions {
                 cell2.removeWall(LEFT);
             }
         }
+        else if (cell1.getCol() == cell2.getCol()) {
+            if (cell1.getRow() > cell2.getRow()) {
+                cell1.removeWall(TOP);
+                cell2.removeWall(BOTTOM);
+            }
+            else {
+                cell1.removeWall(BOTTOM);
+                cell2.removeWall(TOP);
+            }
+        }
+        cell1.openCell();
+        cell2.openCell();
     }
 
 

@@ -13,11 +13,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         BorderPane root = new BorderPane();
+        Scene scene = new Scene(root);
 
-        MazeDrawer mazeDrawer = new MazeDrawer(rowCount, colCount);
+        MazeDrawer mazeDrawer = new MazeDrawer(scene, rowCount, colCount); //TODO Separate scene later
         root.setCenter(mazeDrawer.getMaze());
 
-        Scene scene = new Scene(root);
+
         stage.setTitle("Maze Generator & Solver");
         stage.setScene(scene);
         stage.show();
