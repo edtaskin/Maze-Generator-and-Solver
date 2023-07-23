@@ -107,6 +107,8 @@ public class Cell implements Directions {
      */
     public static void playAnimations() {
         FillTransition nextAnimation = animationQueue.dequeue();
+        if (nextAnimation == null)
+            return;
         System.out.println(nextAnimation.toString());
         nextAnimation.setOnFinished(event -> playAnimations());
         nextAnimation.play();
