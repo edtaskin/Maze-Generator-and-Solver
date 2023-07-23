@@ -1,15 +1,17 @@
 .cell {
     -fx-border-color: red;
+    -fx-background-color: blue;
 }
 
 .filled {
     -fx-background-color: black;
 }
 
-
+/*
 .opened {
     -fx-background-color: blue;
 }
+*/
 
 .top {
     -fx-border-top-width: 1px;

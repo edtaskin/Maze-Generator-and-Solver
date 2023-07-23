@@ -68,6 +68,10 @@ public class MazeDrawer implements Directions {
         }
     }
 
+    public void drawMaze() {
+        Cell.playAnimations();
+    }
+
     /*
     Helper methods to fetch specific cells from the maze
      */
@@ -153,7 +157,7 @@ public class MazeDrawer implements Directions {
      */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
-        System.out.println(String.format("Connecting cells (%s) and (%s)", cell1, cell2));
+        //System.out.println(String.format("Connecting cells (%s) and (%s)", cell1, cell2));
         if (cell1.getRow() == cell1.getRow()) {
             if (cell1.getCol() > cell2.getCol()) {
                 cell1.openCell(LEFT);

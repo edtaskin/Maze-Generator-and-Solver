@@ -1,5 +1,6 @@
 .cell {
     -fx-border-color: red;
+    -fx-background-color: blue;
 }
 
 .filled {
