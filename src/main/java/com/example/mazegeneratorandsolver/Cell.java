@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cell implements Directions {
-    private static final int CELL_WIDTH = 30, CELL_HEIGHT = 30;
+    private static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
     private static final Duration FILL_DURATION = Duration.millis(500);
     private static final Color OPEN_COLOR = Color.BLUE, WALL_COLOR = Color.BLACK, FILLING_COLOR = Color.ORANGE;
 
@@ -27,7 +27,7 @@ public class Cell implements Directions {
         this.col = col;
         wallsMap = new HashMap<>();
         pane = new Pane();
-        fillRectangle = new Rectangle(CELL_WIDTH - 2, CELL_HEIGHT - 2);
+        fillRectangle = new Rectangle(CELL_WIDTH - BORDER_WIDTH, CELL_HEIGHT - BORDER_WIDTH);
         fillRectangle.setFill(WALL_COLOR);
         pane.getChildren().add(fillRectangle);
         pane.setOnMouseClicked(event -> System.out.println(pane.getChildren().toString() + " => " + pane.getStyleClass().toString()));
