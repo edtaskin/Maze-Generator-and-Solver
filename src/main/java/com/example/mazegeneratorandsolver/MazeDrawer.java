@@ -57,14 +57,13 @@ public class MazeDrawer implements Directions {
      */
     private void openMazeWays() {
         // TODO
-        Cell endingCell = cells[rowCount - 1][colCount - 1];
-        Cell currentCell = cells[0][0]; // Initially equal to the staring cell
-        //for (int i = 0; i < 200; i++) {
-        while (currentCell != endingCell) {
-            //System.out.println(currentCell.toString());
-            Cell randomCell = getRandomNeighbouringCell(currentCell);
-            connectCells(currentCell, randomCell);
-            currentCell = randomCell;
+        LazyPrimMST mst = new LazyPrimMST(G);
+        for (Edge e : mst.mst()) {
+            int v = e.either();
+            int w = e.other(v);
+            Cell cell1 = getCellByIndex(v);
+            Cell cell2 = getCellByIndex(w);
+            connectCells(cell1, cell2);
         }
     }
 
