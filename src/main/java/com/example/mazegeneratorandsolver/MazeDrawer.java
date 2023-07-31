@@ -2,6 +2,9 @@ package com.example.mazegeneratorandsolver;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,9 +70,43 @@ public class MazeDrawer implements Directions {
         }
     }
 
-    public void drawMaze() {
-        Cell.playAnimations();
+    /*
+    Connects the two input Cells by removing the wall between them.
+     */
+    private void connectCells(Cell cell1, Cell cell2) {
+        assert cell1 != cell2;
+        //System.out.println(String.format("Connecting cells (%s) and (%s)", cell1, cell2));
+        // Draw line connecting cells for the MST
+        Line line = new Line(cell1.getPane().getLayoutX() + Cell.CELL_WIDTH/2, cell1.getPane().getLayoutY() - Cell.CELL_HEIGHT/2,
+                cell2.getPane().getLayoutX() + Cell.CELL_WIDTH/2, cell2.getPane().getLayoutY() - Cell.CELL_HEIGHT/2);
+        System.out.println("--------------");
+        System.out.println(cell1);
+        System.out.println(cell2);
+        System.out.println(line);
+        maze.getChildren().add(line); // TODO Not visible?
+
+        if (cell1.getRow() == cell1.getRow()) {
+            if (cell1.getCol() > cell2.getCol()) {
+                cell1.openCell(LEFT);
+                cell2.openCell(RIGHT);
+            }
+            else {
+                cell1.openCell(RIGHT);
+                cell2.openCell(LEFT);
+            }
+        }
+        else if (cell1.getCol() == cell2.getCol()) {
+            if (cell1.getRow() > cell2.getRow()) {
+                cell1.openCell(TOP);
+                cell2.openCell(BOTTOM);
+            }
+            else {
+                cell1.openCell(BOTTOM);
+                cell2.openCell(TOP);
+            }
+        }
     }
+
 
     /*
     Helper methods to fetch specific cells from the maze
@@ -79,7 +116,6 @@ public class MazeDrawer implements Directions {
         return x * colCount + y;
     }
 
-    // TODO Test correctness
     private Cell getCellByIndex(int index) {
         int y = index % colCount;
         int x = (index - y) / colCount;
@@ -149,35 +185,5 @@ public class MazeDrawer implements Directions {
     private boolean assertValidCell(int x, int y) {
         return (x >= 0 && x < rowCount && y >= 0 && y < colCount);
     }
-
-
-    /*
-    Connects the two input Cells by removing the wall between them.
-     */
-    private void connectCells(Cell cell1, Cell cell2) {
-        assert cell1 != cell2;
-        //System.out.println(String.format("Connecting cells (%s) and (%s)", cell1, cell2));
-        if (cell1.getRow() == cell1.getRow()) {
-            if (cell1.getCol() > cell2.getCol()) {
-                cell1.openCell(LEFT);
-                cell2.openCell(RIGHT);
-            }
-            else {
-                cell1.openCell(RIGHT);
-                cell2.openCell(LEFT);
-            }
-        }
-        else if (cell1.getCol() == cell2.getCol()) {
-            if (cell1.getRow() > cell2.getRow()) {
-                cell1.openCell(TOP);
-                cell2.openCell(BOTTOM);
-            }
-            else {
-                cell1.openCell(BOTTOM);
-                cell2.openCell(TOP);
-            }
-        }
-    }
-
 
 }

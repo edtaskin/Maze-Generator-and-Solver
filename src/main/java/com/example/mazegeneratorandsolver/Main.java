@@ -16,7 +16,6 @@ public class Main extends Application {
         Scene scene = new Scene(root);
 
         MazeDrawer mazeDrawer = new MazeDrawer(scene, rowCount, colCount); //TODO Separate scene later
-        mazeDrawer.drawMaze();
         root.setCenter(mazeDrawer.getMaze());
 
         stage.setTitle("Maze Generator & Solver");
