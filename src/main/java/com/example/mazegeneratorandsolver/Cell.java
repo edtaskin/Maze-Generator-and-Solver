@@ -1,17 +1,17 @@
 package com.example.mazegeneratorandsolver;
 
 import javafx.animation.FillTransition;
-import javafx.animation.TranslateTransition;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cell implements Directions {
-    private static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
+    public static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
     private static final Duration FILL_DURATION = Duration.millis(500);
     private static final Color OPEN_COLOR = Color.BLUE, WALL_COLOR = Color.BLACK, FILLING_COLOR = Color.ORANGE, BORDER_COLOR = Color.RED;
 
@@ -29,11 +29,10 @@ public class Cell implements Directions {
         isOpened = false;
         wallsMap = new HashMap<>();
         pane = new Pane();
-        fillRectangle = new Rectangle(CELL_WIDTH - BORDER_WIDTH, CELL_HEIGHT - BORDER_WIDTH);
+        /*fillRectangle = new Rectangle(CELL_WIDTH - BORDER_WIDTH, CELL_HEIGHT - BORDER_WIDTH);
         fillRectangle.setFill(WALL_COLOR);
-        pane.getChildren().add(fillRectangle);
-        pane.setOnMouseClicked(event -> System.out.println(pane.getChildren().toString() + " => " + pane.getStyleClass().toString()));
-
+        pane.getChildren().add(fillRectangle);*/
+        pane.setOnMouseClicked(event -> System.out.println(Arrays.toString(getCenterCoordinates(5, 5))));
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             wallsMap.put(side, true); // Initially all walls are placed
 
@@ -54,17 +53,19 @@ public class Cell implements Directions {
 
 
     public void openCell(short direction) {
+        /*
         isOpened = true;
         //fillRectangle.setFill(OPEN_COLOR);
         //pane.getStyleClass().remove(DirectionsUtils.toString(direction)); // TODO Instead of removing the border, make it black.
         wallsMap.replace(direction, false);
         enqueueAnimation();
         displayWalls(); // TODO
+
+         */
     }
 
 
     private void displayWalls() {
-        /*
         for (short direction : wallsMap.keySet()) {
             if (wallsMap.get(direction)) {
                 if (!pane.getStyleClass().contains(DirectionsUtils.toString(direction))) {
@@ -74,8 +75,9 @@ public class Cell implements Directions {
             else
                 pane.getStyleClass().remove(DirectionsUtils.toString(direction));
         }
-        */
 
+
+        /*
         if (isOpened) {
             pane.setStyle(String.format("-fx-border-color: %s %s %s %s;",
                                         (wallsMap.get(TOP) ? "black" : "red"),
@@ -83,6 +85,8 @@ public class Cell implements Directions {
                                         (wallsMap.get(LEFT) ? "black" : "red"),
                                         (wallsMap.get(RIGHT) ? "black" : "red")));
         }
+        */
+
     }
 
     @Override
@@ -112,5 +116,11 @@ public class Cell implements Directions {
         System.out.println(nextAnimation.toString());
         nextAnimation.setOnFinished(event -> playAnimations());
         nextAnimation.play();
+    }
+
+    public int[] getCenterCoordinates(int rowCount, int colCount) {
+        int x = col * CELL_WIDTH + CELL_WIDTH / 2;
+        int y = row * CELL_HEIGHT + CELL_HEIGHT / 2;
+        return new int[] {x, y};
     }
 }
