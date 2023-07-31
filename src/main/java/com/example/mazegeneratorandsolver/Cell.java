@@ -41,7 +41,6 @@ public class Cell implements Directions {
     }
 
     public void openCell(short direction) {
-        isOpened = true;
         //pane.getStyleClass().remove(DirectionsUtils.toString(direction)); // TODO Instead of removing the border, make it black.
         wallsMap.replace(direction, false);
         displayWalls(); // TODO
