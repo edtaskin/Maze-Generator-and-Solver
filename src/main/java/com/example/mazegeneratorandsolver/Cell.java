@@ -11,28 +11,25 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cell implements Directions {
+public class Cell extends BorderPane implements Directions {
     public static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
-    private static final Color OPEN_COLOR = Color.BLUE, WALL_COLOR = Color.BLACK, BORDER_COLOR = Color.RED;
+    private static final Color BORDER_COLOR = Color.RED;
 
     private Map<Short, Boolean> wallsMap;
     private final int row, col;
-    private BorderPane borderPane;
 
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
         wallsMap = new HashMap<>();
-        borderPane = new BorderPane();
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             wallsMap.put(side, true); // Initially all walls are placed
-        borderPane.setPrefSize(CELL_WIDTH, CELL_HEIGHT);
-        borderPane.setStyle("-fx-background-color: black;");
+        setPrefSize(CELL_WIDTH, CELL_HEIGHT);
+        setStyle("-fx-background-color: black;");
     }
 
     public int getRow() { return row; }
     public int getCol() { return col; }
-    public BorderPane getPane() { return borderPane; }
 
 /*    public int[] getCenterCoordinates(int rowCount, int colCount) {
         int x = col * CELL_WIDTH + CELL_WIDTH / 2;
@@ -47,26 +44,26 @@ public class Cell implements Directions {
 
 
     private void displayWalls() {
-        borderPane.getChildren().clear();
+        getChildren().clear();
         for (short direction : wallsMap.keySet()) {
             if (wallsMap.get(direction)) {
                 Rectangle wall = null;
                 switch (direction) {
                     case TOP:
                         wall = new Rectangle(CELL_WIDTH, BORDER_WIDTH);
-                        borderPane.setTop(wall);
+                        setTop(wall);
                         break;
                     case BOTTOM:
                         wall = new Rectangle(CELL_WIDTH, BORDER_WIDTH);
-                        borderPane.setBottom(wall);
+                        setBottom(wall);
                         break;
                     case LEFT:
                         wall = new Rectangle(BORDER_WIDTH, CELL_HEIGHT);
-                        borderPane.setLeft(wall);
+                        setLeft(wall);
                         break;
                     case RIGHT:
                         wall = new Rectangle(BORDER_WIDTH, CELL_HEIGHT);
-                        borderPane.setRight(wall);
+                        setRight(wall);
                         break;
                 }
                 wall.setFill(BORDER_COLOR);
