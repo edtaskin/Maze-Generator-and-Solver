@@ -2,16 +2,14 @@ package com.example.mazegeneratorandsolver;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeDrawer implements Directions {
-    private AnchorPane overlayPane; // TODO
+    private AnchorPane anchorPane; // TODO
     private Cell[][] cells;
     private int rowCount, colCount;
     private EdgeWeightedGraph G;
@@ -19,12 +17,12 @@ public class MazeDrawer implements Directions {
     public MazeDrawer(Scene scene, int rowCount, int colCount) {
         this.rowCount = rowCount;
         this.colCount = colCount;
-        overlayPane = new AnchorPane();
+        anchorPane = new AnchorPane();
         cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < colCount; j++) {
                 Cell cell = new Cell(i, j);
-                overlayPane.getChildren().add(cell);
+                anchorPane.getChildren().add(cell);
                 cells[i][j] = cell;
                 double[] topLeftCoordinates = cell.getTopLeftCoordinates(rowCount, colCount);
                 AnchorPane.setLeftAnchor(cell, topLeftCoordinates[0]);
@@ -35,7 +33,7 @@ public class MazeDrawer implements Directions {
         openMazeWays();
     }
 
-    public AnchorPane getMaze() { return overlayPane; }
+    public AnchorPane getMaze() { return anchorPane; }
 
     /*
     Generates an edge weighted graph of randomized edge weights where every cell is connected to all its neighbors.
@@ -76,8 +74,9 @@ public class MazeDrawer implements Directions {
      */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
-        if (cell1.getRow() == cell1.getRow()) {
-            if (cell1.getCol() > cell2.getCol()) {
+        drawLineBetween(cell1, cell2);
+        if (cell1.getRow() == cell2.getRow()) {
+            if (cell1.getCol() > cell2.getCol()) { // CORRECT
                 cell1.openCell(LEFT);
                 cell2.openCell(RIGHT);
             }
@@ -96,6 +95,24 @@ public class MazeDrawer implements Directions {
                 cell2.openCell(TOP);
             }
         }
+    }
+
+    /*
+    Draws an edge in the MST over the maze for debugging
+     */
+    private void drawLineBetween(Cell cell1, Cell cell2) {
+        double[] cell1CenterCoordinates = cell1.getCenterCoordinates(rowCount, colCount);
+        double[] cell2CenterCoordinates = cell2.getCenterCoordinates(rowCount, colCount);
+
+        double cell1CenterX = cell1CenterCoordinates[0];
+        double cell1CenterY = cell1CenterCoordinates[1];
+        double cell2CenterX = cell2CenterCoordinates[0];
+        double cell2CenterY = cell2CenterCoordinates[1];
+
+        Line mstEdge = new Line(cell1CenterX, cell1CenterY, cell2CenterX, cell2CenterY);
+        mstEdge.setStroke(Color.LIGHTBLUE);
+
+        anchorPane.getChildren().add(mstEdge);
     }
 
     /*
