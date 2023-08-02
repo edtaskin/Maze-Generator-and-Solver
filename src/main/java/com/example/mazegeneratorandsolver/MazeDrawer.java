@@ -76,7 +76,7 @@ public class MazeDrawer implements Directions {
         assert cell1 != cell2;
         drawLineBetween(cell1, cell2);
         if (cell1.getRow() == cell2.getRow()) {
-            if (cell1.getCol() > cell2.getCol()) { // CORRECT
+            if (cell1.getCol() > cell2.getCol()) {
                 cell1.openCell(LEFT);
                 cell2.openCell(RIGHT);
             }
