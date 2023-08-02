@@ -1,15 +1,9 @@
 package com.example.mazegeneratorandsolver;
 
-import javafx.animation.FillTransition;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,14 +14,24 @@ public class Cell extends BorderPane implements Directions {
     private Map<Short, Boolean> wallsMap;
     private final int row, col;
 
-    public Cell(int row, int col) {
+    public Cell(int row, int col, int rowCount, int colCount) {
         this.row = row;
         this.col = col;
         wallsMap = new HashMap<>();
-        for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
-            wallsMap.put(side, true); // Initially all walls are placed
+
+        // All cells have upper walls, last row also has bottom walls
+        wallsMap.put(TOP, true);
+        wallsMap.put(BOTTOM, row == rowCount - 1);
+        // All cells have left walls, last column also has right walls
+        wallsMap.put(LEFT, true);
+        wallsMap.put(RIGHT, col == colCount - 1);
+        displayWalls();
+
         setPrefSize(CELL_WIDTH, CELL_HEIGHT);
         setStyle("-fx-background-color: black;");
+        setOnMouseClicked(e -> {
+            System.out.println(this);
+        });
     }
 
     public int getRow() { return row; }
@@ -39,7 +43,15 @@ public class Cell extends BorderPane implements Directions {
         return new double[] {x, y};
     }
 
+    public double[] getCenterCoordinates(int rowCount, int colCount) {
+        double x = col * CELL_WIDTH + CELL_WIDTH/2;
+        double y = row * CELL_HEIGHT + CELL_HEIGHT/2;
+        return new double[] {x, y};
+    }
+
     public void openCell(short direction) {
+        if (!hasWallInDirection(direction))
+            return;
         wallsMap.replace(direction, false);
         displayWalls();
     }
@@ -71,6 +83,10 @@ public class Cell extends BorderPane implements Directions {
                 wall.setFill(BORDER_COLOR);
             }
         }
+    }
+
+    public boolean hasWallInDirection(short direction) {
+        return wallsMap.get(direction);
     }
 
     @Override

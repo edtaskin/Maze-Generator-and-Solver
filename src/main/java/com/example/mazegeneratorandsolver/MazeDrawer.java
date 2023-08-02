@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeDrawer implements Directions {
-    private AnchorPane anchorPane; // TODO
+    private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged
     private Cell[][] cells;
     private int rowCount, colCount;
     private EdgeWeightedGraph G;
@@ -21,7 +21,7 @@ public class MazeDrawer implements Directions {
         cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < colCount; j++) {
-                Cell cell = new Cell(i, j);
+                Cell cell = new Cell(i, j, rowCount, colCount);
                 anchorPane.getChildren().add(cell);
                 cells[i][j] = cell;
                 double[] topLeftCoordinates = cell.getTopLeftCoordinates(rowCount, colCount);
