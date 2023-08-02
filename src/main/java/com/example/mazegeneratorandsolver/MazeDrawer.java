@@ -1,9 +1,9 @@
 package com.example.mazegeneratorandsolver;
 
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.TilePane;
 import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
@@ -11,29 +11,31 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeDrawer implements Directions {
-    private GridPane maze;
+    private AnchorPane overlayPane; // TODO
     private Cell[][] cells;
     private int rowCount, colCount;
     private EdgeWeightedGraph G;
 
     public MazeDrawer(Scene scene, int rowCount, int colCount) {
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         this.rowCount = rowCount;
         this.colCount = colCount;
-        maze = new GridPane();
+        overlayPane = new AnchorPane();
         cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < colCount; j++) {
                 Cell cell = new Cell(i, j);
-                maze.add(cell.getPane(), j, i);
+                overlayPane.getChildren().add(cell);
                 cells[i][j] = cell;
+                double[] topLeftCoordinates = cell.getTopLeftCoordinates(rowCount, colCount);
+                AnchorPane.setLeftAnchor(cell, topLeftCoordinates[0]);
+                AnchorPane.setTopAnchor(cell, topLeftCoordinates[1]);
             }
         }
         this.G = buildGraph();
         openMazeWays();
     }
 
-    public GridPane getMaze() { return maze; }
+    public AnchorPane getMaze() { return overlayPane; }
 
     /*
     Generates an edge weighted graph of randomized edge weights where every cell is connected to all its neighbors.
@@ -59,7 +61,6 @@ public class MazeDrawer implements Directions {
     Randomly marks the cells as open until the start and end of the maze is connected.
      */
     private void openMazeWays() {
-        // TODO
         LazyPrimMST mst = new LazyPrimMST(G);
         for (Edge e : mst.mst()) {
             int v = e.either();
@@ -75,16 +76,6 @@ public class MazeDrawer implements Directions {
      */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
-        //System.out.println(String.format("Connecting cells (%s) and (%s)", cell1, cell2));
-        // Draw line connecting cells for the MST
-        Line line = new Line(cell1.getPane().getLayoutX() + Cell.CELL_WIDTH/2, cell1.getPane().getLayoutY() - Cell.CELL_HEIGHT/2,
-                cell2.getPane().getLayoutX() + Cell.CELL_WIDTH/2, cell2.getPane().getLayoutY() - Cell.CELL_HEIGHT/2);
-        System.out.println("--------------");
-        System.out.println(cell1);
-        System.out.println(cell2);
-        System.out.println(line);
-        maze.getChildren().add(line); // TODO Not visible?
-
         if (cell1.getRow() == cell1.getRow()) {
             if (cell1.getCol() > cell2.getCol()) {
                 cell1.openCell(LEFT);
@@ -106,7 +97,6 @@ public class MazeDrawer implements Directions {
             }
         }
     }
-
 
     /*
     Helper methods to fetch specific cells from the maze

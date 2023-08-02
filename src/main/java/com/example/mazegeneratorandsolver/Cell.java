@@ -1,6 +1,8 @@
 package com.example.mazegeneratorandsolver;
 
 import javafx.animation.FillTransition;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -31,11 +33,11 @@ public class Cell extends BorderPane implements Directions {
     public int getRow() { return row; }
     public int getCol() { return col; }
 
-/*    public int[] getCenterCoordinates(int rowCount, int colCount) {
-        int x = col * CELL_WIDTH + CELL_WIDTH / 2;
-        int y = row * CELL_HEIGHT + CELL_HEIGHT / 2;
-        return new int[] {x, y};
-    }*/
+    public double[] getTopLeftCoordinates(int rowCount, int colCount) {
+        double x = col * CELL_WIDTH;
+        double y = row * CELL_HEIGHT;
+        return new double[] {x, y};
+    }
 
     public void openCell(short direction) {
         wallsMap.replace(direction, false);
