@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
-    private static final int rowCount = 5, colCount = 5; // TODO Make them selectable by the user
+    private static final int rowCount = 10, colCount = 10; // TODO Make them selectable by the user
 
     @Override
     public void start(Stage stage) throws IOException {
