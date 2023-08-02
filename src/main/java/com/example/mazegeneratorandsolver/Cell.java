@@ -1,6 +1,7 @@
 package com.example.mazegeneratorandsolver;
 
 import javafx.animation.FillTransition;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -16,46 +17,60 @@ public class Cell implements Directions {
 
     private Map<Short, Boolean> wallsMap;
     private final int row, col;
-    private Pane pane;
+    private BorderPane borderPane;
 
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
         wallsMap = new HashMap<>();
-        pane = new Pane();
-        pane.setOnMouseClicked(event -> System.out.println(Arrays.toString(getCenterCoordinates(5, 5))));
+        borderPane = new BorderPane();
         for (short side : new short[]{TOP, BOTTOM, RIGHT, LEFT})
             wallsMap.put(side, true); // Initially all walls are placed
-
-        pane.getStyleClass().addAll("cell", "top", "bottom", "left", "right");
-        pane.setPrefSize(CELL_WIDTH, CELL_HEIGHT);
+        borderPane.setPrefSize(CELL_WIDTH, CELL_HEIGHT);
+        borderPane.setStyle("-fx-background-color: black;");
     }
 
     public int getRow() { return row; }
     public int getCol() { return col; }
-    public Pane getPane() { return pane; }
-    public int[] getCenterCoordinates(int rowCount, int colCount) {
+    public BorderPane getPane() { return borderPane; }
+
+/*    public int[] getCenterCoordinates(int rowCount, int colCount) {
         int x = col * CELL_WIDTH + CELL_WIDTH / 2;
         int y = row * CELL_HEIGHT + CELL_HEIGHT / 2;
         return new int[] {x, y};
-    }
+    }*/
 
     public void openCell(short direction) {
-        //pane.getStyleClass().remove(DirectionsUtils.toString(direction)); // TODO Instead of removing the border, make it black.
         wallsMap.replace(direction, false);
-        displayWalls(); // TODO
+        displayWalls();
     }
 
 
     private void displayWalls() {
+        borderPane.getChildren().clear();
         for (short direction : wallsMap.keySet()) {
             if (wallsMap.get(direction)) {
-                if (!pane.getStyleClass().contains(DirectionsUtils.toString(direction))) {
-                    pane.getStyleClass().add(DirectionsUtils.toString(direction));
+                Rectangle wall = null;
+                switch (direction) {
+                    case TOP:
+                        wall = new Rectangle(CELL_WIDTH, BORDER_WIDTH);
+                        borderPane.setTop(wall);
+                        break;
+                    case BOTTOM:
+                        wall = new Rectangle(CELL_WIDTH, BORDER_WIDTH);
+                        borderPane.setBottom(wall);
+                        break;
+                    case LEFT:
+                        wall = new Rectangle(BORDER_WIDTH, CELL_HEIGHT);
+                        borderPane.setLeft(wall);
+                        break;
+                    case RIGHT:
+                        wall = new Rectangle(BORDER_WIDTH, CELL_HEIGHT);
+                        borderPane.setRight(wall);
+                        break;
                 }
+                wall.setFill(BORDER_COLOR);
             }
-            else
-                pane.getStyleClass().remove(DirectionsUtils.toString(direction));
         }
     }
 
