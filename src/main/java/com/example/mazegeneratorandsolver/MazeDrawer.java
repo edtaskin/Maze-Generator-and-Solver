@@ -37,6 +37,7 @@ public class MazeDrawer implements Directions {
 
     /*
     Generates an edge weighted graph of randomized edge weights where every cell is connected to all its neighbors.
+    Edge weights are randomized in order to get a random MST of the graph.
      */
     private EdgeWeightedGraph buildGraph() {
         EdgeWeightedGraph G = new EdgeWeightedGraph(rowCount*colCount);
@@ -56,7 +57,7 @@ public class MazeDrawer implements Directions {
     }
 
     /*
-    Randomly marks the cells as open until the start and end of the maze is connected.
+    Removes the walls that intersect with the edges of the MST, resulting in a maze.
      */
     private void openMazeWays() {
         LazyPrimMST mst = new LazyPrimMST(G);
@@ -70,7 +71,7 @@ public class MazeDrawer implements Directions {
     }
 
     /*
-    Connects the two input Cells by removing the wall between them.
+    Connects the two Cells by removing the wall between them.
      */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
