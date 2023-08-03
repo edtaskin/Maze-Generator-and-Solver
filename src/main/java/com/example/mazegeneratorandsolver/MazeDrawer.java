@@ -1,5 +1,6 @@
 package com.example.mazegeneratorandsolver;
 
+import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -13,6 +14,7 @@ public class MazeDrawer implements Directions {
     private Cell[][] cells;
     private int rowCount, colCount;
     private EdgeWeightedGraph G;
+    private CellAnimator cellAnimator;
 
     public MazeDrawer(Scene scene, int rowCount, int colCount) {
         this.rowCount = rowCount;
@@ -58,8 +60,10 @@ public class MazeDrawer implements Directions {
 
     /*
     Removes the walls that intersect with the edges of the MST, resulting in a maze.
+    Then visually animates the process by removing the walls sequentially.
      */
     private void openMazeWays() {
+        cellAnimator = new CellAnimator();
         LazyPrimMST mst = new LazyPrimMST(G);
         for (Edge e : mst.mst()) {
             int v = e.either();
@@ -68,6 +72,7 @@ public class MazeDrawer implements Directions {
             Cell cell2 = getCellByIndex(w);
             connectCells(cell1, cell2);
         }
+        cellAnimator.playAnimations();
     }
 
     /*
@@ -76,25 +81,33 @@ public class MazeDrawer implements Directions {
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
         drawLineBetween(cell1, cell2);
+        Short direction1 = null;
+        Short direction2 = null;
         if (cell1.getRow() == cell2.getRow()) {
             if (cell1.getCol() > cell2.getCol()) {
-                cell1.openCell(LEFT);
-                cell2.openCell(RIGHT);
+                direction1 = LEFT;
+                direction2 = RIGHT;
             }
             else {
-                cell1.openCell(RIGHT);
-                cell2.openCell(LEFT);
+                direction1 = RIGHT;
+                direction2 = LEFT;
             }
         }
         else if (cell1.getCol() == cell2.getCol()) {
             if (cell1.getRow() > cell2.getRow()) {
-                cell1.openCell(TOP);
-                cell2.openCell(BOTTOM);
+                direction1 = TOP;
+                direction2 = BOTTOM;
             }
             else {
-                cell1.openCell(BOTTOM);
-                cell2.openCell(TOP);
+                direction1 = BOTTOM;
+                direction2 = TOP;
             }
+        }
+        if (direction1 != null && direction2 != null) {
+            FadeTransition fadeTransition1 = cell1.openCell(direction1);
+            FadeTransition fadeTransition2 = cell2.openCell(direction2);
+            cellAnimator.enqueueAnimation(fadeTransition1);
+            cellAnimator.enqueueAnimation(fadeTransition2);
         }
     }
 

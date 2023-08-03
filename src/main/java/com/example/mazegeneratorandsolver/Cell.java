@@ -1,14 +1,19 @@
 package com.example.mazegeneratorandsolver;
 
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cell extends BorderPane implements Directions {
     public static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
+    private static final int FADE_DURATION = 200;
     private static final Color BORDER_COLOR = Color.RED;
 
     private Map<Short, Boolean> wallsMap;
@@ -49,11 +54,32 @@ public class Cell extends BorderPane implements Directions {
         return new double[] {x, y};
     }
 
-    public void openCell(short direction) {
+    public Node getWallInDirection(short direction) {
+        switch (direction) {
+            case TOP:
+                return getTop();
+            case BOTTOM:
+                return getBottom();
+            case LEFT:
+                return getLeft();
+            case RIGHT:
+                return getRight();
+        }
+        return null;
+    }
+
+    public FadeTransition openCell(short direction) {
         if (!hasWallInDirection(direction))
-            return;
+            return null;
+
+        FadeTransition transition = new FadeTransition();
+        transition.setNode(getWallInDirection(direction));
+        transition.setByValue(-1);
+        transition.setDuration(Duration.millis(FADE_DURATION));
+
         wallsMap.replace(direction, false);
-        displayWalls();
+//        displayWalls();
+        return transition;
     }
 
 
