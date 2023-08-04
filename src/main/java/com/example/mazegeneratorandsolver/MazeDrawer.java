@@ -13,7 +13,7 @@ public class MazeDrawer implements Directions {
     private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged
     private Cell[][] cells;
     private int rowCount, colCount;
-    private EdgeWeightedGraph G;
+    private EdgeWeightedGraph graph;
     private CellAnimator cellAnimator;
 
     public MazeDrawer(Scene scene, int rowCount, int colCount) {
@@ -31,7 +31,8 @@ public class MazeDrawer implements Directions {
                 AnchorPane.setTopAnchor(cell, topLeftCoordinates[1]);
             }
         }
-        this.G = buildGraph();
+        graph = buildGraph();
+        cellAnimator = new CellAnimator();
         openMazeWays();
     }
 
@@ -63,8 +64,8 @@ public class MazeDrawer implements Directions {
     Then visually animates the process by removing the walls sequentially.
      */
     private void openMazeWays() {
-        cellAnimator = new CellAnimator();
-        LazyPrimMST mst = new LazyPrimMST(G);
+        cellAnimator.clearQueue();
+        LazyPrimMST mst = new LazyPrimMST(graph);
         for (Edge e : mst.mst()) {
             int v = e.either();
             int w = e.other(v);

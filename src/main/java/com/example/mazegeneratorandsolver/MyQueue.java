@@ -40,6 +40,12 @@ public class MyQueue<T> implements Iterable<T>{
         return item;
     }
 
+    public void clear() {
+        first = null;
+        last = null;
+        n = 0;
+    }
+
     @Override
     public Iterator<T> iterator() { return new ListIterator(); }
 

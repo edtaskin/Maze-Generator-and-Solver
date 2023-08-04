@@ -28,4 +28,8 @@ public class CellAnimator implements Directions {
         animation.play();
     }
 
+    public void clearQueue() {
+        animationsQueue.clear();
+    }
+
 }
