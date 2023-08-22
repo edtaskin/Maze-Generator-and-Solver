@@ -5,7 +5,7 @@ import javafx.animation.FadeTransition;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
-public class CellAnimator implements Directions {
+public class CellAnimator {
     private MyQueue<Animation> animationsQueue;
 
     /*

@@ -19,7 +19,7 @@ public class Main extends Application {
         MazeDrawer mazeDrawer = new MazeDrawer(scene, rowCount, colCount); //TODO Separate scene later
         root.setCenter(mazeDrawer.getMaze());
 
-        mazeDrawer.solveMaze(new Point2D(3, 5), new Point2D(9, 9)); // TODO Set this on GUI
+        mazeDrawer.solveMaze(new Point2D(0, 0), new Point2D(9, 9)); // TODO Set this on GUI
         stage.setTitle("Maze Generator & Solver");
         stage.setScene(scene);
         stage.show();

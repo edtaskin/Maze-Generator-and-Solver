@@ -10,7 +10,7 @@ import javafx.scene.shape.Line;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MazeDrawer implements Directions {
+public class MazeDrawer {
     private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged
     private Cell[][] cells;
     private int rowCount, colCount;
@@ -83,26 +83,26 @@ public class MazeDrawer implements Directions {
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
         drawLineBetween(cell1, cell2);
-        Short direction1 = null;
-        Short direction2 = null;
+        Directions direction1 = null;
+        Directions direction2 = null;
         if (cell1.getRow() == cell2.getRow()) {
             if (cell1.getCol() > cell2.getCol()) {
-                direction1 = LEFT;
-                direction2 = RIGHT;
+                direction1 = Directions.LEFT;
+                direction2 = Directions.RIGHT;
             }
             else {
-                direction1 = RIGHT;
-                direction2 = LEFT;
+                direction1 = Directions.RIGHT;
+                direction2 = Directions.LEFT;
             }
         }
         else if (cell1.getCol() == cell2.getCol()) {
             if (cell1.getRow() > cell2.getRow()) {
-                direction1 = TOP;
-                direction2 = BOTTOM;
+                direction1 = Directions.TOP;
+                direction2 = Directions.BOTTOM;
             }
             else {
-                direction1 = BOTTOM;
-                direction2 = TOP;
+                direction1 = Directions.BOTTOM;
+                direction2 = Directions.TOP;
             }
         }
         if (direction1 != null && direction2 != null) {
@@ -130,7 +130,6 @@ public class MazeDrawer implements Directions {
             Cell cell = getCellByIndex(index);
             cell.setStyle("-fx-background-color: blue");
         }
-        System.out.println("DONE!");
     }
 
     /*
@@ -179,17 +178,17 @@ public class MazeDrawer implements Directions {
     }
 
     private Cell getRandomNeighbouringCell(Cell cell) {
-        List<Short> validDirections = new ArrayList<>();
+        List<Directions> validDirections = new ArrayList<>();
         if (cell.getRow() != 0)
-            validDirections.add(TOP);
+            validDirections.add(Directions.TOP);
         if (cell.getRow() != rowCount - 1)
-            validDirections.add(BOTTOM);
+            validDirections.add(Directions.BOTTOM);
         if (cell.getCol() != 0)
-            validDirections.add(LEFT);
+            validDirections.add(Directions.LEFT);
         if (cell.getCol() != colCount - 1)
-            validDirections.add(RIGHT);
+            validDirections.add(Directions.RIGHT);
         int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
-        short randomDirection = validDirections.get(randomIndex);
+        Directions randomDirection = validDirections.get(randomIndex);
         return getNeighbourByDirection(cell, randomDirection);
         /*
         TODO Alternative:
@@ -209,8 +208,7 @@ public class MazeDrawer implements Directions {
 
     }
 
-    private Cell getNeighbourByDirection(Cell cell, short direction) {
-        assert direction < 4;
+    private Cell getNeighbourByDirection(Cell cell, Directions direction) {
         int deltaRow = 0;
         int deltaCol = 0;
         switch (direction) {

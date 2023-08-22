@@ -38,16 +38,6 @@ public class DijkstraSP {
         }
     }
 
-
-    /*
-    // Returns the edges on the shortest path to as an Iterable
-    public Iterable<Edge> edgesOnPathTo(Edge v) {
-        Stack<Edge> path = new Stack<>();
-        for (Edge x = v; x != src; x = edgeTo[x])
-            path.push()
-    }
-     */
-
     // Returns the vertices on the shortest path to vertex with index v as an Iterable
     public Iterable<Integer> verticesOnPathTo(int v) {
         Stack<Integer> path = new Stack<>();

@@ -11,12 +11,12 @@ import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cell extends BorderPane implements Directions {
+public class Cell extends BorderPane {
     public static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
     private static final int FADE_DURATION = 200;
     private static final Color BORDER_COLOR = Color.RED;
 
-    private Map<Short, Boolean> wallsMap;
+    private Map<Directions, Boolean> wallsMap;
     private final int row, col;
 
     public Cell(int row, int col, int rowCount, int colCount) {
@@ -25,11 +25,11 @@ public class Cell extends BorderPane implements Directions {
         wallsMap = new HashMap<>();
 
         // All cells have upper walls, last row also has bottom walls
-        wallsMap.put(TOP, true);
-        wallsMap.put(BOTTOM, row == rowCount - 1);
+        wallsMap.put(Directions.TOP, true);
+        wallsMap.put(Directions.BOTTOM, row == rowCount - 1);
         // All cells have left walls, last column also has right walls
-        wallsMap.put(LEFT, true);
-        wallsMap.put(RIGHT, col == colCount - 1);
+        wallsMap.put(Directions.LEFT, true);
+        wallsMap.put(Directions.RIGHT, col == colCount - 1);
         displayWalls();
 
         setPrefSize(CELL_WIDTH, CELL_HEIGHT);
@@ -54,7 +54,7 @@ public class Cell extends BorderPane implements Directions {
         return new double[] {x, y};
     }
 
-    public Node getWallInDirection(short direction) {
+    public Node getWallInDirection(Directions direction) {
         switch (direction) {
             case TOP:
                 return getTop();
@@ -68,7 +68,7 @@ public class Cell extends BorderPane implements Directions {
         return null;
     }
 
-    public FadeTransition openCell(short direction) {
+    public FadeTransition openCell(Directions direction) {
         if (!hasWallInDirection(direction))
             return null;
 
@@ -85,7 +85,7 @@ public class Cell extends BorderPane implements Directions {
 
     private void displayWalls() {
         getChildren().clear();
-        for (short direction : wallsMap.keySet()) {
+        for (Directions direction : wallsMap.keySet()) {
             if (wallsMap.get(direction)) {
                 Rectangle wall = null;
                 switch (direction) {
@@ -111,7 +111,7 @@ public class Cell extends BorderPane implements Directions {
         }
     }
 
-    public boolean hasWallInDirection(short direction) {
+    public boolean hasWallInDirection(Directions direction) {
         return wallsMap.get(direction);
     }
 
@@ -119,12 +119,12 @@ public class Cell extends BorderPane implements Directions {
     public String toString() {
         StringBuilder res = new StringBuilder(String.format("Row: %d, Col: %d, Walls: [", row, col));
         int i = 0;
-        for (short direction : wallsMap.keySet()) {
+        for (Directions direction : wallsMap.keySet()) {
             if (wallsMap.get(direction)) {
                 if (i != wallsMap.keySet().size() - 1)
-                    res.append(DirectionsUtils.toString(direction)).append(", ");
+                    res.append(direction.getText()).append(", ");
                 else
-                    res.append(DirectionsUtils.toString(direction));
+                    res.append(direction.getText());
             }
             i++;
         }

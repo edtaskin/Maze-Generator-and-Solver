@@ -1,8 +1,18 @@
 package com.example.mazegeneratorandsolver;
 
-public interface Directions {
-    short TOP = 0;
-    short BOTTOM = 1;
-    short RIGHT = 2;
-    short LEFT = 3;
+public enum Directions {
+    TOP("top"),
+    BOTTOM("bottom"),
+    LEFT("left"),
+    RIGHT("right");
+
+    private final String text;
+
+    Directions(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
 }
