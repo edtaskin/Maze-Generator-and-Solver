@@ -1,6 +1,7 @@
 package com.example.mazegeneratorandsolver;
 
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -18,6 +19,7 @@ public class Main extends Application {
         MazeDrawer mazeDrawer = new MazeDrawer(scene, rowCount, colCount); //TODO Separate scene later
         root.setCenter(mazeDrawer.getMaze());
 
+        mazeDrawer.solveMaze(new Point2D(3, 5), new Point2D(9, 9)); // TODO Set this on GUI
         stage.setTitle("Maze Generator & Solver");
         stage.setScene(scene);
         stage.show();

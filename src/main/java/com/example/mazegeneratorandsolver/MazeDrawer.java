@@ -1,6 +1,7 @@
 package com.example.mazegeneratorandsolver;
 
 import javafx.animation.FadeTransition;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -112,6 +113,26 @@ public class MazeDrawer implements Directions {
         }
     }
 
+    // TODO Can't we use Point2D anywhere else?
+    // TODO Set this on GUI later.
+    // TODO Comment
+    public void solveMaze(Point2D start, Point2D end) {
+        cellAnimator.clearQueue();
+
+        int startX = (int) start.getX();
+        int startY = (int) start.getY();
+
+        int endX = (int) end.getX();
+        int endY = (int) end.getY();
+
+        DijkstraSP dijkstraSP = new DijkstraSP(graph, getCellIndexByCoordinate(startX, startY));
+        for (int index : dijkstraSP.verticesOnPathTo(getCellIndexByCoordinate(endX, endY))) {
+            Cell cell = getCellByIndex(index);
+            cell.setStyle("-fx-background-color: blue");
+        }
+        System.out.println("DONE!");
+    }
+
     /*
     Draws an edge in the MST over the maze for debugging
      */
@@ -134,7 +155,15 @@ public class MazeDrawer implements Directions {
     Helper methods to fetch specific cells from the maze
      */
 
+    /*
+    Returns the index of a cell given its (x, y) coordinates.
+    For convenience returns the index of the last element for (-1, -1) input.
+     */
     private int getCellIndexByCoordinate(int x, int y) {
+        if (x == -1 && y == -1) {
+            x = rowCount - 1;
+            y = colCount - 1;
+        }
         return x * colCount + y;
     }
 
