@@ -9,9 +9,9 @@ import javafx.scene.shape.Line;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
+// TODO Consider moving MazeSolver functionality to a separate class
 public class MazeDrawer {
-    private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged
+    private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged, unless the MST is needed for demonstration purposes
     private Cell[][] cells;
     private int rowCount, colCount;
     private EdgeWeightedGraph graph;
@@ -106,10 +106,10 @@ public class MazeDrawer {
             }
         }
         if (direction1 != null && direction2 != null) {
-            FadeTransition fadeTransition1 = cell1.openCell(direction1);
-            FadeTransition fadeTransition2 = cell2.openCell(direction2);
-            cellAnimator.enqueueAnimation(fadeTransition1);
-            cellAnimator.enqueueAnimation(fadeTransition2);
+            cell1.openCell(direction1);
+            cell2.openCell(direction2);
+            cellAnimator.enqueueAnimation(CellAnimator.getFadeTransitionInDirection(cell1, direction1));
+            cellAnimator.enqueueAnimation(CellAnimator.getFadeTransitionInDirection(cell2, direction2));
         }
     }
 
@@ -117,7 +117,7 @@ public class MazeDrawer {
     // TODO Set this on GUI later.
     // TODO Comment
     public void solveMaze(Point2D start, Point2D end) {
-        cellAnimator.clearQueue();
+        // cellAnimator.clearQueue(); // TODO Should be active when GUI is ready
 
         int startX = (int) start.getX();
         int startY = (int) start.getY();
@@ -126,9 +126,11 @@ public class MazeDrawer {
         int endY = (int) end.getY();
 
         DijkstraSP dijkstraSP = new DijkstraSP(graph, getCellIndexByCoordinate(startX, startY));
+        // System.out.println(dijkstraSP.verticesOnPathTo(getCellIndexByCoordinate(endX, endY)));
         for (int index : dijkstraSP.verticesOnPathTo(getCellIndexByCoordinate(endX, endY))) {
             Cell cell = getCellByIndex(index);
-            cell.setStyle("-fx-background-color: blue");
+            //cell.setStyle("-fx-background-color: blue");
+            cellAnimator.enqueueAnimation(CellAnimator.getFillTransition(cell));
         }
     }
 

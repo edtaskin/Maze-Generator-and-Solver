@@ -13,7 +13,6 @@ import java.util.Map;
 
 public class Cell extends BorderPane {
     public static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
-    private static final int FADE_DURATION = 200;
     private static final Color BORDER_COLOR = Color.RED;
 
     private Map<Directions, Boolean> wallsMap;
@@ -68,20 +67,11 @@ public class Cell extends BorderPane {
         return null;
     }
 
-    public FadeTransition openCell(Directions direction) {
-        if (!hasWallInDirection(direction))
-            return null;
-
-        FadeTransition transition = new FadeTransition();
-        transition.setNode(getWallInDirection(direction));
-        transition.setByValue(-1);
-        transition.setDuration(Duration.millis(FADE_DURATION));
-
+    public void openCell(Directions direction) {
+        /*if (!hasWallInDirection(direction))
+            return null;*/
         wallsMap.replace(direction, false);
-//        displayWalls();
-        return transition;
     }
-
 
     private void displayWalls() {
         getChildren().clear();

@@ -1,6 +1,7 @@
 package com.example.mazegeneratorandsolver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Stack;
 
 public class DijkstraSP {
@@ -44,6 +45,7 @@ public class DijkstraSP {
         for (int x = v; x != src; x = edgeTo[x].other(x))
             path.push(x);
         path.push(src);
+        Collections.reverse(path);
         return path;
     }
 
