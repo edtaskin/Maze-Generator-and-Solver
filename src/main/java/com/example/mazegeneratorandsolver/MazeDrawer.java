@@ -48,6 +48,7 @@ public class MazeDrawer {
         for (int v = 0; v < rowCount; v++) {
             for (int w = 0; w < colCount; w++) {
                 if (v != 0) {
+                    // TODO Adding an edge between cells should be easier!!!
                     Edge e = new Edge(getCellIndexByCoordinate(v, w), getCellIndexByCoordinate(v - 1, w), ThreadLocalRandom.current().nextDouble(0, 10000));
                     G.addEdge(e);
                 }
@@ -67,6 +68,9 @@ public class MazeDrawer {
     private void openMazeWays() {
         cellAnimator.clearQueue();
         LazyPrimMST mst = new LazyPrimMST(graph);
+
+        graph = new EdgeWeightedGraph(rowCount*colCount); // Reset edges // TODO Better way?
+
         for (Edge e : mst.mst()) {
             int v = e.either();
             int w = e.other(v);
@@ -82,7 +86,7 @@ public class MazeDrawer {
      */
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
-        drawLineBetween(cell1, cell2);
+        // drawLineBetween(cell1, cell2); // Prints MST for debugging
         Directions direction1 = null;
         Directions direction2 = null;
         if (cell1.getRow() == cell2.getRow()) {
@@ -106,6 +110,7 @@ public class MazeDrawer {
             }
         }
         if (direction1 != null && direction2 != null) {
+            graph.addEdge(new Edge(getCellIndex(cell1), getCellIndex(cell2), 0)); // TODO Weight? => Weights don't matter for dijkstra since there is only 1 valid way?
             cell1.openCell(direction1);
             cell2.openCell(direction2);
             cellAnimator.enqueueAnimation(CellAnimator.getFadeTransitionInDirection(cell1, direction1));
@@ -129,7 +134,6 @@ public class MazeDrawer {
         // System.out.println(dijkstraSP.verticesOnPathTo(getCellIndexByCoordinate(endX, endY)));
         for (int index : dijkstraSP.verticesOnPathTo(getCellIndexByCoordinate(endX, endY))) {
             Cell cell = getCellByIndex(index);
-            //cell.setStyle("-fx-background-color: blue");
             cellAnimator.enqueueAnimation(CellAnimator.getFillTransition(cell));
         }
     }
@@ -172,6 +176,10 @@ public class MazeDrawer {
         int y = index % colCount;
         int x = (index - y) / colCount;
         return cells[x][y];
+    }
+
+    private int getCellIndex(Cell cell) {
+        return cell.getRow() * colCount + cell.getCol();
     }
 
     private Cell getRandomCell() {

@@ -28,6 +28,14 @@ public class EdgeWeightedGraph {
         edges.add(e);
     }
 
+    public void removeEdge(Edge e) {
+        int v = e.either();
+        int w = e.other(v);
+        adj[v].remove(e);
+        adj[w].remove(e);
+        edges.remove(e);
+    }
+
     public Iterable<Edge> adjEdges(int v) { return adj[v]; }
 
     public Iterable<Integer> adjVertices(int v) {
@@ -36,6 +44,13 @@ public class EdgeWeightedGraph {
             adjVertices.add(e.other(v));
         }
         return adjVertices;
+    }
+
+    public Edge getEdgeBetween(int v, int w) {
+        for (Edge e : this.adjEdges(v))
+            if (e.other(v) == w)
+                return e;
+        return null;
     }
 
     public Iterable<Edge> edges() { return edges; }

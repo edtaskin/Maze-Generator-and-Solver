@@ -34,7 +34,7 @@ public class Cell extends BorderPane {
         setPrefSize(CELL_WIDTH, CELL_HEIGHT);
         setStyle("-fx-background-color: black;");
         setOnMouseClicked(e -> {
-            System.out.println(this);
+            System.out.println(this); // TODO Del
         });
     }
 
@@ -68,8 +68,6 @@ public class Cell extends BorderPane {
     }
 
     public void openCell(Directions direction) {
-        /*if (!hasWallInDirection(direction))
-            return null;*/
         wallsMap.replace(direction, false);
     }
 
@@ -99,10 +97,6 @@ public class Cell extends BorderPane {
                 wall.setFill(BORDER_COLOR);
             }
         }
-    }
-
-    public boolean hasWallInDirection(Directions direction) {
-        return wallsMap.get(direction);
     }
 
     @Override
