@@ -1,6 +1,5 @@
 package com.example.mazegeneratorandsolver;
 
-import javafx.animation.FadeTransition;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -10,14 +9,15 @@ import javafx.scene.shape.Line;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 // TODO Consider moving MazeSolver functionality to a separate class
-public class MazeDrawer {
+public class MazeController {
     private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged, unless the MST is needed for demonstration purposes
     private Cell[][] cells;
     private int rowCount, colCount;
     private EdgeWeightedGraph graph;
     private CellAnimator cellAnimator;
+    private boolean displayMST = false;
 
-    public MazeDrawer(Scene scene, int rowCount, int colCount) {
+    public MazeController(Scene scene, int rowCount, int colCount) {
         this.rowCount = rowCount;
         this.colCount = colCount;
         anchorPane = new AnchorPane();
@@ -32,12 +32,15 @@ public class MazeDrawer {
                 AnchorPane.setTopAnchor(cell, topLeftCoordinates[1]);
             }
         }
-        graph = buildGraph();
         cellAnimator = new CellAnimator();
-        openMazeWays();
     }
 
     public AnchorPane getMaze() { return anchorPane; }
+
+    public void generateMaze() {
+        graph = buildGraph();
+        openMazeWays();
+    }
 
     /*
     Generates an edge weighted graph of randomized edge weights where every cell is connected to all its neighbors.
@@ -66,7 +69,7 @@ public class MazeDrawer {
     Then visually animates the process by removing the walls sequentially.
      */
     private void openMazeWays() {
-        cellAnimator.clearQueue();
+//        cellAnimator.clearQueue();
         LazyPrimMST mst = new LazyPrimMST(graph);
 
         graph = new EdgeWeightedGraph(rowCount*colCount); // Reset edges // TODO Better way?
@@ -78,15 +81,14 @@ public class MazeDrawer {
             Cell cell2 = getCellByIndex(w);
             connectCells(cell1, cell2);
         }
-        cellAnimator.playAnimations();
+        cellAnimator.play();
     }
 
-    /*
-    Connects the two Cells by removing the wall between them.
-     */
+
+    // Connects the two Cells by removing the wall between them.
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
-        // drawLineBetween(cell1, cell2); // Prints MST for debugging
+        if (displayMST) drawLineBetween(cell1, cell2); // Prints MST for debugging
         Directions direction1 = null;
         Directions direction2 = null;
         if (cell1.getRow() == cell2.getRow()) {
@@ -118,12 +120,9 @@ public class MazeDrawer {
         }
     }
 
-    // TODO Can't we use Point2D anywhere else?
-    // TODO Set this on GUI later.
-    // TODO Comment
+    // Finds and displays the path from start to end using Dijkstra's Algorithm
     public void solveMaze(Point2D start, Point2D end) {
-        // cellAnimator.clearQueue(); // TODO Should be active when GUI is ready
-
+        // cellAnimator.clearQueue(); // TODO
         int startX = (int) start.getX();
         int startY = (int) start.getY();
 
@@ -131,16 +130,14 @@ public class MazeDrawer {
         int endY = (int) end.getY();
 
         DijkstraSP dijkstraSP = new DijkstraSP(graph, getCellIndexByCoordinate(startX, startY));
-        // System.out.println(dijkstraSP.verticesOnPathTo(getCellIndexByCoordinate(endX, endY)));
         for (int index : dijkstraSP.verticesOnPathTo(getCellIndexByCoordinate(endX, endY))) {
             Cell cell = getCellByIndex(index);
             cellAnimator.enqueueAnimation(CellAnimator.getFillTransition(cell));
         }
     }
 
-    /*
-    Draws an edge in the MST over the maze for debugging
-     */
+
+   // Draws an edge in the MST over the maze for debugging
     private void drawLineBetween(Cell cell1, Cell cell2) {
         double[] cell1CenterCoordinates = cell1.getCenterCoordinates(rowCount, colCount);
         double[] cell2CenterCoordinates = cell2.getCenterCoordinates(rowCount, colCount);
@@ -152,13 +149,12 @@ public class MazeDrawer {
 
         Line mstEdge = new Line(cell1CenterX, cell1CenterY, cell2CenterX, cell2CenterY);
         mstEdge.setStroke(Color.LIGHTBLUE);
+        mstEdge.setOpacity(0.5);
 
         anchorPane.getChildren().add(mstEdge);
     }
 
-    /*
-    Helper methods to fetch specific cells from the maze
-     */
+    // Helper methods to fetch specific cells from the maze
 
     /*
     Returns the index of a cell given its (x, y) coordinates.
@@ -200,22 +196,6 @@ public class MazeDrawer {
         int randomIndex = ThreadLocalRandom.current().nextInt(0, validDirections.size());
         Directions randomDirection = validDirections.get(randomIndex);
         return getNeighbourByDirection(cell, randomDirection);
-        /*
-        TODO Alternative:
-        - Hold a static variable of directions [TOP, BOTTOM, RIGHT, LEFT]
-        - Randomly select one direction
-        - Create an assertion method to check if direction is valid (0 <= x < rowCount, 0 <= y < colCount)
-             private boolean assertValidNeighbour(int x, int y) {
-                    return (x >= 0 && x < rowCount && y >= 0 && y < colCount);
-            }
-        - Randomly select another direction until a valid one is found.
-        Is it more efficient?
-        - Memory-wise, YES.
-        - Time-wise ???
-        Does it matter?
-        - ???
-         */
-
     }
 
     private Cell getNeighbourByDirection(Cell cell, Directions direction) {
@@ -235,14 +215,13 @@ public class MazeDrawer {
                 deltaCol = -1;
                 break;
         }
-        if (!assertValidCell(cell.getRow() + deltaRow, cell.getCol() + deltaCol))
-            throw new ArrayIndexOutOfBoundsException(String.format("(%d, %d) is not a valid neighbour of (%d, %d).", cell.getRow() + deltaRow, cell.getCol() + deltaCol, cell.getRow(), cell.getCol()));
-        else
-            return cells[cell.getRow() + deltaRow][cell.getCol() + deltaCol];
+        assert isValidCell(cell.getRow() + deltaRow, cell.getCol() + deltaCol);
+        return cells[cell.getRow() + deltaRow][cell.getCol() + deltaCol];
     }
 
-    private boolean assertValidCell(int x, int y) {
+    private boolean isValidCell(int x, int y) {
         return (x >= 0 && x < rowCount && y >= 0 && y < colCount);
     }
 
 }
+

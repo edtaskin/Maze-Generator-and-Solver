@@ -16,10 +16,11 @@ public class Main extends Application {
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
 
-        MazeDrawer mazeDrawer = new MazeDrawer(scene, rowCount, colCount); //TODO Separate scene later
-        root.setCenter(mazeDrawer.getMaze());
+        MazeController mazeController = new MazeController(scene, rowCount, colCount); //TODO Separate scene later
+        root.setCenter(mazeController.getMaze());
 
-        mazeDrawer.solveMaze(new Point2D(0, 0), new Point2D(9, 9)); // TODO Set this on GUI
+        mazeController.generateMaze();
+        mazeController.solveMaze(new Point2D(0, 0), new Point2D(9, 9)); // TODO Set this on GUI
         stage.setTitle("Maze Generator & Solver");
         stage.setScene(scene);
         stage.show();

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Stack;
 
+// TODO Replace Dijkstra with simple DFS
 public class DijkstraSP {
     private Edge[] edgeTo;
     private double[] distTo;

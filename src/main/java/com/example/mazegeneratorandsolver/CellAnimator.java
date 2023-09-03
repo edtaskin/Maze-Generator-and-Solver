@@ -3,7 +3,6 @@ package com.example.mazegeneratorandsolver;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -12,29 +11,11 @@ public class CellAnimator {
     private static final int FADE_DURATION = 200;
 
     private MyQueue<Animation> animationsQueue;
+    private MyQueue<Animation> finishedAnimationsQueue;
 
-    /*
-    Constructor for maze generation animations
-     */
     public CellAnimator() {
         animationsQueue = new MyQueue<>();
-    }
-
-    public void enqueueAnimation(Animation animation) {
-        if (animation == null) return;
-        animationsQueue.enqueue(animation);
-    }
-
-    public void playAnimations() {
-        if (animationsQueue.isEmpty())
-            return;
-        Animation animation = animationsQueue.dequeue();
-        animation.setOnFinished(e -> playAnimations());
-        animation.play();
-    }
-
-    public void clearQueue() {
-        animationsQueue.clear();
+        finishedAnimationsQueue = new MyQueue<>();
     }
 
     public static FadeTransition getFadeTransitionInDirection(Cell cell, Directions direction) {
@@ -59,5 +40,32 @@ public class CellAnimator {
         transition.setDuration(Duration.millis(FADE_DURATION));
         return transition;
     }
+
+    public void enqueueAnimation(Animation animation) {
+        if (animation == null) return;
+        animationsQueue.enqueue(animation);
+    }
+
+    public void play() {
+        if (animationsQueue.isEmpty())
+            return;
+        Animation animation = animationsQueue.dequeue();
+        animation.setOnFinished(e -> play());
+        animation.play();
+        finishedAnimationsQueue.enqueue(animation);
+    }
+
+    public void replay() {
+        animationsQueue = finishedAnimationsQueue;
+        finishedAnimationsQueue.clear();
+        play();
+    }
+
+    public void clearQueue() {
+        animationsQueue.clear();
+        finishedAnimationsQueue.clear();
+    }
+
+
 
 }
