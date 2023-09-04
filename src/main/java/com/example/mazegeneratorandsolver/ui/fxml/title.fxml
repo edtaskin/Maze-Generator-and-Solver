@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mazegeneratorandsolver.ui.TitleController">
+   <children>
+      <HBox alignment="CENTER" layoutX="76.0" layoutY="231.0" prefHeight="100.0" prefWidth="447.0" spacing="100.0">
+         <children>
+            <Button fx:id="startButton" mnemonicParsing="false" onAction="#start" text="Start">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#showSettings" text="Settings">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <Text layoutX="148.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maze Generator &amp; Solver" textAlignment="CENTER" wrappingWidth="304.80340576171875">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

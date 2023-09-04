@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 import java.util.Arrays;
 import java.util.Collections;

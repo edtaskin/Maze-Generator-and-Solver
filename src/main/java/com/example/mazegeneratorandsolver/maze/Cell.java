@@ -1,12 +1,9 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Map;

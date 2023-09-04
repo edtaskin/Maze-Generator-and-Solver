@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 public enum Directions {
     TOP("top"),

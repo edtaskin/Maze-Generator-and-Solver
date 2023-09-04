@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -66,6 +66,8 @@ public class CellAnimator {
         finishedAnimationsQueue.clear();
     }
 
-
+    public Animation getLastAnimation() {
+        return animationsQueue.tail();
+    }
 
 }

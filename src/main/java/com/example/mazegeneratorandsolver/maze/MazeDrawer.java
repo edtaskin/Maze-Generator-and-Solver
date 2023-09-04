@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -9,7 +9,7 @@ import javafx.scene.shape.Line;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 // TODO Consider moving MazeSolver functionality to a separate class
-public class MazeController {
+public class MazeDrawer {
     private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged, unless the MST is needed for demonstration purposes
     private Cell[][] cells;
     private int rowCount, colCount;
@@ -17,7 +17,7 @@ public class MazeController {
     private CellAnimator cellAnimator;
     private boolean displayMST = false;
 
-    public MazeController(Scene scene, int rowCount, int colCount) {
+    public MazeDrawer(Scene scene, int rowCount, int colCount) {
         this.rowCount = rowCount;
         this.colCount = colCount;
         anchorPane = new AnchorPane();
@@ -40,6 +40,8 @@ public class MazeController {
     public void generateMaze() {
         graph = buildGraph();
         openMazeWays();
+        cellAnimator.play();
+//        cellAnimator.getLastAnimation().setOnFinished(// TODO);
     }
 
     /*
@@ -81,7 +83,6 @@ public class MazeController {
             Cell cell2 = getCellByIndex(w);
             connectCells(cell1, cell2);
         }
-        cellAnimator.play();
     }
 
 

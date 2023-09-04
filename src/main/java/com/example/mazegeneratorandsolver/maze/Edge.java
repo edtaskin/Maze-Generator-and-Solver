@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 public class Edge implements Comparable<Edge> {
     private final int v, w;

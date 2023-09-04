@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

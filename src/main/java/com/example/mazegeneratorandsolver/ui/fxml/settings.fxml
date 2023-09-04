@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com/example/mazegeneratorandsolver/ui/SettingsController.java">
+   <top>
+      <AnchorPane prefHeight="45.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <Button fx:id="backButton" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" text="◄ Back" />
+            <Text layoutX="257.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox layoutX="237.0" layoutY="43.0" prefHeight="299.0" prefWidth="126.0" spacing="25.0">
+               <children>
+                  <Slider fx:id="removeWallAnimationSpeed" />
+                  <Slider fx:id="fillCellAnimationSpeed" />
+                  <ColorPicker fx:id="cellBackgroundColor" />
+                  <ColorPicker fx:id="wallColor" />
+                  <ColorPicker fx:id="fillColor" />
+                  <CheckBox fx:id="displayMST" mnemonicParsing="false" prefHeight="17.0" prefWidth="129.0" text="Display MST" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

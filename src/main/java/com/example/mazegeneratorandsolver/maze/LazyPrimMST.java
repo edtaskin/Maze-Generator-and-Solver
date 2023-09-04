@@ -1,4 +1,7 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
+
+import com.example.mazegeneratorandsolver.maze.Edge;
+import com.example.mazegeneratorandsolver.maze.EdgeWeightedGraph;
 
 import java.util.ArrayList;
 import java.util.List;

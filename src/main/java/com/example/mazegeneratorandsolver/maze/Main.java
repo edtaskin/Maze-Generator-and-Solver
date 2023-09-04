@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 import javafx.application.Application;
 import javafx.geometry.Point2D;
@@ -13,14 +13,17 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        BorderPane root = new BorderPane();
+        BorderPane root = new BorderPane(); // TODO Use SceneBuilder
         Scene scene = new Scene(root);
 
-        MazeController mazeController = new MazeController(scene, rowCount, colCount); //TODO Separate scene later
-        root.setCenter(mazeController.getMaze());
+//        Screen screen = Screen.getPrimary();
+//        Rectangle2D bounds = screen.getVisualBounds();
 
-        mazeController.generateMaze();
-        mazeController.solveMaze(new Point2D(0, 0), new Point2D(9, 9)); // TODO Set this on GUI
+        MazeDrawer mazeDrawer = new MazeDrawer(scene, rowCount, colCount); //TODO Separate scene later
+        root.setCenter(mazeDrawer.getMaze());
+
+        mazeDrawer.generateMaze();
+        mazeDrawer.solveMaze(new Point2D(0, 0), new Point2D(9, 9)); // TODO Set this on GUI
         stage.setTitle("Maze Generator & Solver");
         stage.setScene(scene);
         stage.show();

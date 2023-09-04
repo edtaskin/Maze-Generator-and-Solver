@@ -1,4 +1,4 @@
-package com.example.mazegeneratorandsolver;
+package com.example.mazegeneratorandsolver.maze;
 
 import java.util.Iterator;
 
@@ -44,6 +44,10 @@ public class MyQueue<T> implements Iterable<T>{
         first = null;
         last = null;
         n = 0;
+    }
+
+    public T tail() {
+        return last.item;
     }
 
     @Override
