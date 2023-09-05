@@ -1,26 +1,56 @@
 package com.example.mazegeneratorandsolver.ui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Slider;
 
-public class SettingsController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class SettingsController extends Controller implements Initializable {
     @FXML
     private Button backButton;
 
-    private SceneManager sceneManager;
-    private Settings settings;
+    @FXML
+    private Slider removeWallAnimationSpeed, fillCellAnimationSpeed;
 
-    public SettingsController(SceneManager sceneManager, Settings settings) {
-        this.sceneManager = sceneManager;
-        this.settings = settings;
+    @FXML
+    private ColorPicker cellBackgroundColor, wallColor, fillColor;
+
+    @FXML
+    private CheckBox displayMST;
+
+    public SettingsController(SceneManager sceneManager) {
+        super(sceneManager);
     }
 
-    // TODO Make the default settings visible in UI. => implement Initializable?
-
+    @FXML
     private void goToPreviousPage() {
         sceneManager.switchScene("title.fxml");
-        // TODO Pass the settings to the data
+        applySettings();
+        TitleController titleController = new TitleController(sceneManager);
     }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        removeWallAnimationSpeed.setValue(settings.getRemoveWallAnimationSpeed());
+        fillCellAnimationSpeed.setValue(settings.getFillCellAnimationSpeed());
+        cellBackgroundColor.setValue(settings.getCellBackgroundColor());
+        wallColor.setValue(settings.getWallColor());
+        fillColor.setValue(settings.getFillColor());
+        displayMST.setSelected(settings.isDisplayMST());
+    }
+
+    private void applySettings() {
+        settings.setRemoveWallAnimationSpeed(removeWallAnimationSpeed.getValue());
+        settings.setFillCellAnimationSpeed(fillCellAnimationSpeed.getValue());
+        settings.setCellBackgroundColor(cellBackgroundColor.getValue());
+        settings.setWallColor(wallColor.getValue());
+        settings.setFillColor(fillColor.getValue());
+        settings.setDisplayMST(displayMST.isSelected());
+    }
 }

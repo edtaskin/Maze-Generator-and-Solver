@@ -6,9 +6,41 @@ import javafx.scene.paint.Color;
 public class Settings {
     private static Settings instance;
 
+    // TODO Add maze dimensions!
+    private int rowCount, colCount;
     private Color cellBackgroundColor, wallColor, fillColor;
     private double removeWallAnimationSpeed, fillCellAnimationSpeed;
     private boolean displayMST;
+
+    // Default settings
+    private Settings() {
+        cellBackgroundColor = Color.BLACK;
+        wallColor = Color.RED;
+        fillColor = Color.BLUE;
+        removeWallAnimationSpeed = fillCellAnimationSpeed = 1;
+        displayMST = false;
+    }
+
+    public static Settings getInstance() {
+        if (instance == null) instance = new Settings();
+        return instance;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public int getColCount() {
+        return colCount;
+    }
+
+    public void setColCount(int colCount) {
+        this.colCount = colCount;
+    }
 
     public Color getCellBackgroundColor() {
         return cellBackgroundColor;
@@ -58,17 +90,4 @@ public class Settings {
         this.displayMST = displayMST;
     }
 
-    // Default settings
-    private Settings() {
-        cellBackgroundColor = Color.BLACK;
-        wallColor = Color.RED;
-        fillColor = Color.BLUE;
-        removeWallAnimationSpeed = fillCellAnimationSpeed = 1;
-        displayMST = false;
-    }
-
-    public Settings getInstance() {
-        if (instance == null) instance = new Settings();
-        return instance;
-    }
 }

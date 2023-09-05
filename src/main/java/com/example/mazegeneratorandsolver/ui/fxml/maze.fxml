@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com/example/mazegeneratorandsolver/ui/MazeController.java">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
@@ -25,9 +24,9 @@
    <right>
       <VBox alignment="CENTER" prefHeight="355.0" prefWidth="96.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="generateButton" mnemonicParsing="false" text="Generate" />
-            <Button fx:id="solveButton" mnemonicParsing="false" text="Solve" />
-            <Button mnemonicParsing="false" text="Replay" />
+            <Button fx:id="generateButton" mnemonicParsing="false" onAction="#generateMaze" text="Generate" />
+            <Button fx:id="solveButton" mnemonicParsing="false" onAction="#solveMaze" text="Solve" />
+            <Button fx:id="replayButton" mnemonicParsing="false" onAction="#replayAnimations" text="Replay" />
          </children>
          <padding>
             <Insets left="10.0" />
