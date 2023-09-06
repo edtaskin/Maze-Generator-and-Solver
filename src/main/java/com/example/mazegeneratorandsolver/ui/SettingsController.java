@@ -36,11 +36,10 @@ public class SettingsController extends Controller implements Initializable {
 
     @FXML
     private void goToPreviousPage() {
-        sceneManager.switchScene("title.fxml");
         applySettings();
+        sceneManager.switchScene("title.fxml");
     }
 
-    @FXML
     private void applySettings() {
         settings.setRemoveWallAnimationSpeed(removeWallAnimationSpeed.getValue());
         settings.setFillCellAnimationSpeed(fillCellAnimationSpeed.getValue());
