@@ -17,7 +17,7 @@ public class MazeDrawer {
     private CellAnimator cellAnimator;
     private boolean displayMST = false;
 
-    public MazeDrawer(Scene scene, int rowCount, int colCount) {
+    public MazeDrawer(int rowCount, int colCount) {
         this.rowCount = rowCount;
         this.colCount = colCount;
         anchorPane = new AnchorPane();

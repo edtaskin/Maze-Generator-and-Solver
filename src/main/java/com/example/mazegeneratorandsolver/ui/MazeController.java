@@ -2,11 +2,15 @@ package com.example.mazegeneratorandsolver.ui;
 
 import com.example.mazegeneratorandsolver.maze.MazeDrawer;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.AnchorPane;
 
-public class MazeController extends Controller {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MazeController extends Controller implements Initializable {
     @FXML
     private Button backButton, generateButton, solveButton, replayButton;
 
@@ -15,11 +19,11 @@ public class MazeController extends Controller {
 
     private MazeDrawer mazeDrawer;
 
-    public MazeController(SceneManager sceneManager) {
-        super(sceneManager);
-        this.mazeDrawer = new MazeDrawer(settings.getRowCount(), settings.getColCount());
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeController();
+        this.mazeDrawer = new MazeDrawer(settings.getRowCount(), settings.getColCount()); // TODO
     }
-
     @FXML
     private void goToPreviousPage() {
         sceneManager.switchScene("title.fxml");
@@ -39,4 +43,5 @@ public class MazeController extends Controller {
     private void replayAnimations() {
 
     }
+
 }

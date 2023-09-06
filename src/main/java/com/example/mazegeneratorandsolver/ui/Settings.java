@@ -2,7 +2,6 @@ package com.example.mazegeneratorandsolver.ui;
 
 import javafx.scene.paint.Color;
 
-// Singleton class
 public class Settings {
     private static Settings instance;
 

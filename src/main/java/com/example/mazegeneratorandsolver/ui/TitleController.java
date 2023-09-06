@@ -1,26 +1,28 @@
 package com.example.mazegeneratorandsolver.ui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
-public class TitleController extends Controller {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class TitleController extends Controller implements Initializable {
     @FXML
     private Button startButton, settingsButton;
 
-    public TitleController(SceneManager sceneManager) {
-        super(sceneManager);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeController();
     }
 
     @FXML
     private void start() {
         sceneManager.switchScene("maze.fxml");
-        MazeController mazeController = new MazeController(sceneManager);
     }
 
     @FXML
     private void showSettings() {
         sceneManager.switchScene("settings.fxml");
-        SettingsController settingsController = new SettingsController(sceneManager);
     }
-
 }

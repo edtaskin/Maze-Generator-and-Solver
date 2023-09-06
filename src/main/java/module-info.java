@@ -5,4 +5,7 @@ module com.example.mazesolver {
 
     exports com.example.mazegeneratorandsolver.maze;
     opens com.example.mazegeneratorandsolver.maze to javafx.fxml;
+
+    exports com.example.mazegeneratorandsolver.ui;
+    opens com.example.mazegeneratorandsolver.ui to javafx.fxml;
 }

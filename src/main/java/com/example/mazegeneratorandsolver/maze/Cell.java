@@ -1,5 +1,6 @@
 package com.example.mazegeneratorandsolver.maze;
 
+import com.example.mazegeneratorandsolver.ui.Settings;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -29,10 +30,7 @@ public class Cell extends BorderPane {
         displayWalls();
 
         setPrefSize(CELL_WIDTH, CELL_HEIGHT);
-        setStyle("-fx-background-color: black;");
-        setOnMouseClicked(e -> {
-            System.out.println(this); // TODO Del
-        });
+        setStyle(String.format("-fx-background-color: %s", Settings.getInstance().getCellBackgroundColor().toString())); // TODO Test
     }
 
     public int getRow() { return row; }
@@ -91,7 +89,7 @@ public class Cell extends BorderPane {
                         setRight(wall);
                         break;
                 }
-                wall.setFill(BORDER_COLOR);
+                wall.setFill(Settings.getInstance().getWallColor());
             }
         }
     }
