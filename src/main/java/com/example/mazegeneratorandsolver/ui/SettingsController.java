@@ -15,7 +15,7 @@ public class SettingsController extends Controller implements Initializable {
     private Button backButton;
 
     @FXML
-    private Slider removeWallAnimationSpeed, fillCellAnimationSpeed;
+    private Slider rowCount, colCount, removeWallAnimationSpeed, fillCellAnimationSpeed;
 
     @FXML
     private ColorPicker cellBackgroundColor, wallColor, fillColor;
@@ -26,12 +26,17 @@ public class SettingsController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeController();
+        rowCount.setValue(settings.getRowCount());
+        colCount.setValue(settings.getColCount());
+        displayMST.setSelected(settings.isDisplayMST());
+
         removeWallAnimationSpeed.setValue(settings.getRemoveWallAnimationSpeed());
         fillCellAnimationSpeed.setValue(settings.getFillCellAnimationSpeed());
         cellBackgroundColor.setValue(settings.getCellBackgroundColor());
+
         wallColor.setValue(settings.getWallColor());
         fillColor.setValue(settings.getFillColor());
-        displayMST.setSelected(settings.isDisplayMST());
+
     }
 
     @FXML
@@ -41,11 +46,15 @@ public class SettingsController extends Controller implements Initializable {
     }
 
     private void applySettings() {
+        settings.setRowCount((int) rowCount.getValue());
+        settings.setColCount((int) colCount.getValue());
+        settings.setDisplayMST(displayMST.isSelected());
+
         settings.setRemoveWallAnimationSpeed(removeWallAnimationSpeed.getValue());
         settings.setFillCellAnimationSpeed(fillCellAnimationSpeed.getValue());
         settings.setCellBackgroundColor(cellBackgroundColor.getValue());
+
         settings.setWallColor(wallColor.getValue());
         settings.setFillColor(fillColor.getValue());
-        settings.setDisplayMST(displayMST.isSelected());
     }
 }

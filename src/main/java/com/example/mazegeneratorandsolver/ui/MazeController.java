@@ -23,6 +23,7 @@ public class MazeController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeController();
         this.mazeDrawer = new MazeDrawer(settings.getRowCount(), settings.getColCount()); // TODO
+        mazeContainer = mazeDrawer.getMaze(); // TODO Doesn't work! Make a child instead? Or directly make the center node of the Borderpane?
     }
     @FXML
     private void goToPreviousPage() {
