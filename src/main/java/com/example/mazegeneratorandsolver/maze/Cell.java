@@ -30,7 +30,10 @@ public class Cell extends BorderPane {
         displayWalls();
 
         setPrefSize(CELL_WIDTH, CELL_HEIGHT);
-        setStyle(String.format("-fx-background-color: %s", Settings.getInstance().getCellBackgroundColor().toString())); // TODO Test
+        Color cellBackgroundColor =  Settings.getInstance().getCellBackgroundColor();
+        // Remove the starting "0x" from string representation of Color
+        String hexColor = cellBackgroundColor.toString().substring(2);
+        setStyle(String.format("-fx-background-color: #%s", hexColor));
     }
 
     public int getRow() { return row; }
