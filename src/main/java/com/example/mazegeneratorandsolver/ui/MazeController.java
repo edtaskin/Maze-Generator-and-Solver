@@ -3,9 +3,11 @@ package com.example.mazegeneratorandsolver.ui;
 import com.example.mazegeneratorandsolver.maze.MazeDrawer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
@@ -18,6 +20,9 @@ public class MazeController extends Controller implements Initializable {
 
     @FXML
     private Button backButton, generateButton, solveButton, replayButton;
+
+    @FXML
+    private Label messageLabel;
 
     private MazeDrawer mazeDrawer;
 
@@ -34,12 +39,22 @@ public class MazeController extends Controller implements Initializable {
 
     @FXML
     private void generateMaze() {
-
+        mazeDrawer.generateMaze();
     }
 
     @FXML
     private void solveMaze() {
+/*        // TODO Make endpoints selectable on UI
+        double startX, startY, endX, endY;
+        messageLabel.setText("Select a starting cell on the maze for the maze solver.");
+        messageLabel.setVisible(true);
 
+        messageLabel.setText("Select an ending cell on the maze for the maze solver.");
+
+        mazeDrawer.solveMaze(new Point2D(x1, y1), new Point2D(x2, y2)); // TODO Doesn't work!*/
+
+        // Default // TODO Add to settings: Maze solver endpoints: Default | Custom
+        mazeDrawer.solveMaze(new Point2D(0, 0), new Point2D(-1, -1));
     }
 
     @FXML

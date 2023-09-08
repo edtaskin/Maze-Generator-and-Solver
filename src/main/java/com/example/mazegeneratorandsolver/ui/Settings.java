@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 public class Settings {
     private static Settings instance;
 
-    // TODO Add maze dimensions to UI!
     private int rowCount, colCount;
     private Color cellBackgroundColor, wallColor, fillColor;
     private double removeWallAnimationSpeed, fillCellAnimationSpeed;

@@ -32,7 +32,6 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader();
             URL fxmlUrl = getClass().getResource("/fxml/" + fxmlFileName);
-            System.out.println(fxmlUrl.toString()); // TODO Del
             loader.setLocation(fxmlUrl);
             Parent root = loader.load();
             this.controller = loader.getController();

@@ -19,18 +19,6 @@ public class Main extends Application {
         sceneManager.switchScene("title.fxml");
         stage.show();
         TitleController titleController = (TitleController) sceneManager.getController();
-
-
-        /*BorderPane root = new BorderPane(); // TODO Use SceneBuilder
-        Scene scene = new Scene(root);
-
-        MazeDrawer mazeDrawer = new MazeDrawer(scene, rowCount, colCount); //TODO Separate scene later
-        root.setCenter(mazeDrawer.getMaze());
-
-        mazeDrawer.generateMaze();
-        mazeDrawer.solveMaze(new Point2D(0, 0), new Point2D(9, 9)); // TODO Set this on GUI*/
-//        stage.setScene(scene);
-
     }
 
     public static void main(String[] args) {

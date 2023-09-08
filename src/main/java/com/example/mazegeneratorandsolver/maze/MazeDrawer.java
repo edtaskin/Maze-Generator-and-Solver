@@ -74,7 +74,7 @@ public class MazeDrawer {
 //        cellAnimator.clearQueue();
         LazyPrimMST mst = new LazyPrimMST(graph);
 
-        graph = new EdgeWeightedGraph(rowCount*colCount); // Reset edges // TODO Better way?
+        graph = new EdgeWeightedGraph(rowCount*colCount); // Reset edges
 
         for (Edge e : mst.mst()) {
             int v = e.either();
