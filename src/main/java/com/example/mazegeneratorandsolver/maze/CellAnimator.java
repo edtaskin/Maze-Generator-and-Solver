@@ -1,5 +1,6 @@
 package com.example.mazegeneratorandsolver.maze;
 
+import com.example.mazegeneratorandsolver.ui.Settings;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
@@ -8,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class CellAnimator {
-    private static final int FADE_DURATION = 200;
+    private static Settings settings = Settings.getInstance();
 
     private MyQueue<Animation> animationsQueue;
     private MyQueue<Animation> finishedAnimationsQueue;
@@ -22,7 +23,7 @@ public class CellAnimator {
         FadeTransition transition = new FadeTransition();
         transition.setNode(cell.getWallInDirection(direction));
         transition.setByValue(-1);
-        transition.setDuration(Duration.millis(FADE_DURATION));
+        transition.setDuration(Duration.millis(getFadeDuration()));
         return transition;
     }
 
@@ -34,10 +35,10 @@ public class CellAnimator {
         cell.setCenter(rectangle);
 
         FillTransition transition = new FillTransition();
-        transition.setFromValue(Color.BLACK);
-        transition.setToValue(Color.BLUE);
+        transition.setFromValue(settings.getCellBackgroundColor());
+        transition.setToValue(settings.getFillColor());
         transition.setShape(rectangle);
-        transition.setDuration(Duration.millis(FADE_DURATION));
+        transition.setDuration(Duration.millis(getFillDuration()));
         return transition;
     }
 
@@ -70,4 +71,11 @@ public class CellAnimator {
         return animationsQueue.tail();
     }
 
+    private static int getFadeDuration() {
+        return (int) (200 / settings.getRemoveWallAnimationSpeed());
+    }
+
+    private static int getFillDuration() {
+        return (int) (200 / settings.getFillCellAnimationSpeed());
+    }
 }
