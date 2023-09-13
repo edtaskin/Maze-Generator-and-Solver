@@ -1,6 +1,7 @@
 package com.example.mazegeneratorandsolver.maze;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class MyQueue<T> implements Iterable<T>{
     private Node first, last;
@@ -32,7 +33,7 @@ public class MyQueue<T> implements Iterable<T>{
     }
 
     public T dequeue(){
-        if (isEmpty()) return null;
+        if (isEmpty()) throw new NoSuchElementException("Queue is empty");
         T item = first.item;
         first = first.next;
         if (isEmpty()) last = null;
@@ -47,6 +48,7 @@ public class MyQueue<T> implements Iterable<T>{
     }
 
     public T tail() {
+        if (isEmpty()) throw new NoSuchElementException("Queue is empty");
         return last.item;
     }
 

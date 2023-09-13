@@ -48,12 +48,14 @@ public class CellAnimator {
     }
 
     public void play() {
-        if (animationsQueue.isEmpty())
-            return;
-        Animation animation = animationsQueue.dequeue();
-        animation.setOnFinished(e -> play());
-        animation.play();
-        finishedAnimationsQueue.enqueue(animation);
+        Animation currentAnimation = animationsQueue.dequeue();
+        currentAnimation.play();
+        while (animationsQueue.size() > 1) {
+            finishedAnimationsQueue.enqueue(currentAnimation);
+            Animation nextAnimation = animationsQueue.dequeue();
+            currentAnimation.setOnFinished(e -> nextAnimation.play());
+            currentAnimation = nextAnimation;
+        }
     }
 
     public void replay() {
