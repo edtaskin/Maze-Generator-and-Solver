@@ -1,6 +1,8 @@
 package com.example.mazegeneratorandsolver.ui;
 
+import com.example.mazegeneratorandsolver.maze.CellAnimator;
 import com.example.mazegeneratorandsolver.maze.MazeDrawer;
+import javafx.animation.Animation;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -25,12 +27,16 @@ public class MazeController extends Controller implements Initializable {
     private Label messageLabel;
 
     private MazeDrawer mazeDrawer;
+    private CellAnimator cellAnimator;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeController();
         this.mazeDrawer = new MazeDrawer(settings.getRowCount(), settings.getColCount());
+        this.cellAnimator = mazeDrawer.getCellAnimator();
         root.setCenter(mazeDrawer.getMaze());
+        solveButton.setDisable(true);
+        replayButton.setDisable(true);
     }
     @FXML
     private void goToPreviousPage() {
@@ -40,26 +46,27 @@ public class MazeController extends Controller implements Initializable {
     @FXML
     private void generateMaze() {
         mazeDrawer.generateMaze();
+        Animation lastAnimation = cellAnimator.getLastAnimation();
+        lastAnimation.setOnFinished(e -> solveButton.setDisable(false));
+        cellAnimator.play();
+        generateButton.setDisable(true);
     }
 
     @FXML
     private void solveMaze() {
-/*        // TODO Make endpoints selectable on UI
-        double startX, startY, endX, endY;
-        messageLabel.setText("Select a starting cell on the maze for the maze solver.");
-        messageLabel.setVisible(true);
-
-        messageLabel.setText("Select an ending cell on the maze for the maze solver.");
-
-        mazeDrawer.solveMaze(new Point2D(x1, y1), new Point2D(x2, y2)); // TODO Doesn't work!*/
-
-        // Default // TODO Add to settings: Maze solver endpoints: Default | Custom
+        // TODO Make endpoints selectable on UI => Add to settings: Maze solver endpoints: Default | Custom
         mazeDrawer.solveMaze(new Point2D(0, 0), new Point2D(-1, -1));
+        cellAnimator.getLastAnimation().setOnFinished(e -> replayButton.setDisable(false));
+        cellAnimator.play();
+        solveButton.setDisable(true);
     }
 
     @FXML
     private void replayAnimations() {
-
+        // TODO Doesn't work
+        mazeDrawer.removeAnimationEffects();
+        mazeDrawer.getCellAnimator().replay();
+        // TODO Separate replay for generate and solve
     }
 
 }

@@ -4,6 +4,8 @@ import com.example.mazegeneratorandsolver.ui.Settings;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -11,7 +13,7 @@ import javafx.util.Duration;
 public class CellAnimator {
     private static Settings settings = Settings.getInstance();
 
-    private MyQueue<Animation> animationsQueue;
+    public MyQueue<Animation> animationsQueue; // TODO Make it private
     private MyQueue<Animation> finishedAnimationsQueue;
 
     public CellAnimator() {
@@ -50,7 +52,7 @@ public class CellAnimator {
     public void play() {
         Animation currentAnimation = animationsQueue.dequeue();
         currentAnimation.play();
-        while (animationsQueue.size() > 1) {
+        while (!animationsQueue.isEmpty()) { // Was animationsQueue.size() > 1
             finishedAnimationsQueue.enqueue(currentAnimation);
             Animation nextAnimation = animationsQueue.dequeue();
             currentAnimation.setOnFinished(e -> nextAnimation.play());
