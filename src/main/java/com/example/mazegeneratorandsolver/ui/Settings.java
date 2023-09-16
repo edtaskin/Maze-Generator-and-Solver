@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 public class Settings {
     private static Settings instance;
 
+    private final double DEFAULT_CELL_SIZE = 30;
+    private final int DEFAULT_ROW_COL_COUNT = 10;
     private int rowCount, colCount;
     private Color cellBackgroundColor, wallColor, fillColor;
     private double removeWallAnimationSpeed, fillCellAnimationSpeed;
@@ -89,4 +91,7 @@ public class Settings {
         this.displayMST = displayMST;
     }
 
+    public double getCellSize() {
+        return DEFAULT_CELL_SIZE *  DEFAULT_ROW_COL_COUNT / Math.max(rowCount, colCount);
+    }
 }
