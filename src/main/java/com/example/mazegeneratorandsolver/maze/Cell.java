@@ -1,7 +1,10 @@
 package com.example.mazegeneratorandsolver.maze;
 
 import com.example.mazegeneratorandsolver.ui.Settings;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -10,45 +13,49 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cell extends BorderPane {
-    public static final int CELL_WIDTH = 30, CELL_HEIGHT = 30, BORDER_WIDTH = 2;
+    public static final int BORDER_WIDTH = 2;
     private static final Color BORDER_COLOR = Color.RED;
 
     private Map<Directions, Boolean> wallsMap;
     private final int row, col;
+    private double cellSize;
 
-    public Cell(int row, int col, int rowCount, int colCount) {
+    public Cell(int row, int col) {
         this.row = row;
         this.col = col;
         wallsMap = new HashMap<>();
+        cellSize = Settings.getInstance().getCellSize();
 
-        // All cells have upper walls, last row also has bottom walls
-        wallsMap.put(Directions.TOP, true);
-        wallsMap.put(Directions.BOTTOM, row == rowCount - 1);
-        // All cells have left walls, last column also has right walls
-        wallsMap.put(Directions.LEFT, true);
-        wallsMap.put(Directions.RIGHT, col == colCount - 1);
+        setWallsMap();
         displayWalls();
-
-        setPrefSize(CELL_WIDTH, CELL_HEIGHT);
-        Color cellBackgroundColor =  Settings.getInstance().getCellBackgroundColor();
-        // Remove the starting "0x" from string representation of Color
-        String hexColor = cellBackgroundColor.toString().substring(2);
-        setStyle(String.format("-fx-background-color: #%s", hexColor));
+        setCellStyling();
     }
 
     public int getRow() { return row; }
+
     public int getCol() { return col; }
 
+    public double getCellSize() { return cellSize; }
+
+    public int getIndex() {
+        Settings settings = Settings.getInstance();
+        return row * settings.getColCount() + col;
+    }
+
     public double[] getTopLeftCoordinates(int rowCount, int colCount) {
-        double x = col * CELL_WIDTH;
-        double y = row * CELL_HEIGHT;
+        double x = col * cellSize;
+        double y = row * cellSize;
         return new double[] {x, y};
     }
 
     public double[] getCenterCoordinates(int rowCount, int colCount) {
-        double x = col * CELL_WIDTH + CELL_WIDTH/2;
-        double y = row * CELL_HEIGHT + CELL_HEIGHT/2;
+        double x = col * cellSize + cellSize /2;
+        double y = row * cellSize + cellSize/2;
         return new double[] {x, y};
+    }
+
+    public boolean hasWallInDirection(Directions direction) {
+        return wallsMap.get(direction);
     }
 
     public Node getWallInDirection(Directions direction) {
@@ -69,33 +76,79 @@ public class Cell extends BorderPane {
         wallsMap.replace(direction, false);
     }
 
+    private void setWallsMap() {
+        Settings settings = Settings.getInstance();
+        int rowCount = settings.getRowCount();
+        int colCount = settings.getColCount();
+        // All cells have upper walls, last row also has bottom walls
+        wallsMap.put(Directions.TOP, true);
+        wallsMap.put(Directions.BOTTOM, row == rowCount - 1);
+        // All cells have left walls, last column also has right walls
+        wallsMap.put(Directions.LEFT, true);
+        wallsMap.put(Directions.RIGHT, col == colCount - 1);
+    }
+
+    private void setCellStyling() {
+        setPrefSize(cellSize, cellSize);
+        Color cellBackgroundColor =  Settings.getInstance().getCellBackgroundColor();
+        BackgroundFill fill = new BackgroundFill(cellBackgroundColor, null, null);
+        setBackground(new Background(fill));
+    }
+
     private void displayWalls() {
         getChildren().clear();
+
+        Rectangle center = new Rectangle(cellSize - 2 * BORDER_WIDTH, cellSize - 2 * BORDER_WIDTH);
+        center.setFill(Settings.getInstance().getCellBackgroundColor());
+        setCenter(center);
+
         for (Directions direction : wallsMap.keySet()) {
             if (wallsMap.get(direction)) {
                 Rectangle wall = null;
                 switch (direction) {
                     case TOP:
-                        wall = new Rectangle(CELL_WIDTH, BORDER_WIDTH);
+                        wall = new Rectangle(cellSize, BORDER_WIDTH);
                         setTop(wall);
                         break;
                     case BOTTOM:
-                        wall = new Rectangle(CELL_WIDTH, BORDER_WIDTH);
+                        wall = new Rectangle(cellSize, BORDER_WIDTH);
                         setBottom(wall);
                         break;
                     case LEFT:
-                        wall = new Rectangle(BORDER_WIDTH, CELL_HEIGHT);
+                        wall = new Rectangle(BORDER_WIDTH, cellSize);
                         setLeft(wall);
                         break;
                     case RIGHT:
-                        wall = new Rectangle(BORDER_WIDTH, CELL_HEIGHT);
+                        wall = new Rectangle(BORDER_WIDTH, cellSize);
                         setRight(wall);
                         break;
                 }
-                wall.setFill(Settings.getInstance().getWallColor());
+                if (wallsMap.get(direction))
+                    wall.setFill(Settings.getInstance().getWallColor());
+                else
+                    wall.setFill(Settings.getInstance().getCellBackgroundColor());
             }
         }
     }
+
+    public void resetCell() {
+        setWallsMap();
+        displayWalls();
+    }
+
+    // TODO Delete if won't be used
+    public Point2D getCellShape() {
+        double width = cellSize;
+        if (wallsMap.get(Directions.LEFT))      width -= Cell.BORDER_WIDTH;
+        if (wallsMap.get(Directions.RIGHT))     width -= Cell.BORDER_WIDTH;
+
+        double height = cellSize;
+        if (wallsMap.get(Directions.TOP))       height -= Cell.BORDER_WIDTH;
+        if (wallsMap.get(Directions.BOTTOM))    height -= Cell.BORDER_WIDTH;
+
+        return new Point2D(width, height);
+    }
+
 
     @Override
     public String toString() {
