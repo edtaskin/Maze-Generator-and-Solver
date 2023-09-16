@@ -64,7 +64,7 @@ public class MazeController extends Controller implements Initializable {
     @FXML
     private void replayAnimations() {
         // TODO Doesn't work
-        mazeDrawer.removeAnimationEffects();
+        mazeDrawer.resetCells();
         mazeDrawer.getCellAnimator().replay();
         // TODO Separate replay for generate and solve
     }

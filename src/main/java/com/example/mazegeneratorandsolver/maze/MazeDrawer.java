@@ -1,16 +1,19 @@
 package com.example.mazegeneratorandsolver.maze;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 // TODO Consider moving MazeSolver functionality to a separate class
 public class MazeDrawer {
-    private AnchorPane anchorPane; // TODO May convert back to GridPane once maze generation is completely debugged, unless the MST is needed for demonstration purposes
+    // Use AnchorPane instead of Grid to be able to display the MST over the maze // TODO Another way? Like stacking a pane over the maze?
+    private AnchorPane anchorPane;
     private Cell[][] cells;
     private int rowCount, colCount;
     private EdgeWeightedGraph graph;
@@ -24,7 +27,7 @@ public class MazeDrawer {
         cells = new Cell[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < colCount; j++) {
-                Cell cell = new Cell(i, j, rowCount, colCount);
+                Cell cell = new Cell(i, j);
                 anchorPane.getChildren().add(cell);
                 cells[i][j] = cell;
                 double[] topLeftCoordinates = cell.getTopLeftCoordinates(rowCount, colCount);
@@ -37,11 +40,11 @@ public class MazeDrawer {
 
     public AnchorPane getMaze() { return anchorPane; }
 
+    public CellAnimator getCellAnimator() { return cellAnimator; }
+
     public void generateMaze() {
         graph = buildGraph();
         openMazeWays();
-        cellAnimator.play();
-//        cellAnimator.getLastAnimation().setOnFinished(// TODO);
     }
 
     /*
@@ -71,9 +74,7 @@ public class MazeDrawer {
     Then visually animates the process by removing the walls sequentially.
      */
     private void openMazeWays() {
-//        cellAnimator.clearQueue();
         LazyPrimMST mst = new LazyPrimMST(graph);
-
         graph = new EdgeWeightedGraph(rowCount*colCount); // Reset edges
 
         for (Edge e : mst.mst()) {
@@ -89,7 +90,8 @@ public class MazeDrawer {
     // Connects the two Cells by removing the wall between them.
     private void connectCells(Cell cell1, Cell cell2) {
         assert cell1 != cell2;
-        if (displayMST) drawLineBetween(cell1, cell2); // Prints MST for debugging
+        // Display MST edge
+        if (displayMST) drawLineBetween(cell1, cell2);
         Directions direction1 = null;
         Directions direction2 = null;
         if (cell1.getRow() == cell2.getRow()) {
@@ -113,7 +115,7 @@ public class MazeDrawer {
             }
         }
         if (direction1 != null && direction2 != null) {
-            graph.addEdge(new Edge(getCellIndex(cell1), getCellIndex(cell2), 0)); // TODO Weight? => Weights don't matter for dijkstra since there is only 1 valid way?
+            graph.addEdge(new Edge(cell1.getIndex(), cell2.getIndex(), 0)); // TODO Weight? => Weights don't matter for dijkstra since there is only 1 valid way?
             cell1.openCell(direction1);
             cell2.openCell(direction2);
             cellAnimator.enqueueAnimation(CellAnimator.getFadeTransitionInDirection(cell1, direction1));
@@ -123,10 +125,8 @@ public class MazeDrawer {
 
     // Finds and displays the path from start to end using Dijkstra's Algorithm
     public void solveMaze(Point2D start, Point2D end) {
-        // cellAnimator.clearQueue(); // TODO
         int startX = (int) start.getX();
         int startY = (int) start.getY();
-
         int endX = (int) end.getX();
         int endY = (int) end.getY();
 
@@ -138,7 +138,7 @@ public class MazeDrawer {
     }
 
 
-   // Draws an edge in the MST over the maze for debugging
+   // Draws the MST edge between two cells"
     private void drawLineBetween(Cell cell1, Cell cell2) {
         double[] cell1CenterCoordinates = cell1.getCenterCoordinates(rowCount, colCount);
         double[] cell2CenterCoordinates = cell2.getCenterCoordinates(rowCount, colCount);
@@ -149,10 +149,17 @@ public class MazeDrawer {
         double cell2CenterY = cell2CenterCoordinates[1];
 
         Line mstEdge = new Line(cell1CenterX, cell1CenterY, cell2CenterX, cell2CenterY);
-        mstEdge.setStroke(Color.LIGHTBLUE);
+        mstEdge.setStroke(Color.LIGHTBLUE); // TODO Set MST color?
         mstEdge.setOpacity(0.5);
 
         anchorPane.getChildren().add(mstEdge);
+    }
+
+    // TODO It should reset to initial state, don't use cell.displayWalls
+    public void resetCells() {
+        for (Cell[] row : cells)
+            for (Cell cell : row)
+                cell.resetCell();
     }
 
     // Helper methods to fetch specific cells from the maze
@@ -166,17 +173,14 @@ public class MazeDrawer {
             x = rowCount - 1;
             y = colCount - 1;
         }
-        return x * colCount + y;
+        else if (x * y < 0) throw new ArrayIndexOutOfBoundsException("No such index.");
+        return cells[x][y].getIndex();
     }
 
     private Cell getCellByIndex(int index) {
         int y = index % colCount;
         int x = (index - y) / colCount;
         return cells[x][y];
-    }
-
-    private int getCellIndex(Cell cell) {
-        return cell.getRow() * colCount + cell.getCol();
     }
 
     private Cell getRandomCell() {
@@ -220,6 +224,7 @@ public class MazeDrawer {
         return cells[cell.getRow() + deltaRow][cell.getCol() + deltaCol];
     }
 
+    // Checks if cell exists at given row and column index
     private boolean isValidCell(int x, int y) {
         return (x >= 0 && x < rowCount && y >= 0 && y < colCount);
     }

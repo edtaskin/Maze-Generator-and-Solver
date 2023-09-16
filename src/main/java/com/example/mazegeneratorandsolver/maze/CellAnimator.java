@@ -4,16 +4,13 @@ import com.example.mazegeneratorandsolver.ui.Settings;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class CellAnimator {
     private static Settings settings = Settings.getInstance();
 
-    public MyQueue<Animation> animationsQueue; // TODO Make it private
+    private MyQueue<Animation> animationsQueue;
     private MyQueue<Animation> finishedAnimationsQueue;
 
     public CellAnimator() {
@@ -32,8 +29,8 @@ public class CellAnimator {
     // TODO Consider a more fluid-like fill animation later
     public static FillTransition getFillTransition(Cell cell) {
         Rectangle rectangle = new Rectangle();
-        rectangle.setWidth(Cell.CELL_WIDTH);
-        rectangle.setHeight(Cell.CELL_HEIGHT);
+        rectangle.setWidth(cell.getCellSize());
+        rectangle.setHeight(cell.getCellSize());
         cell.setCenter(rectangle);
 
         FillTransition transition = new FillTransition();
