@@ -70,13 +70,13 @@
                         <VBox>
                            <children>
                               <Label prefHeight="17.0" prefWidth="89.0" text="Remove Wall" />
-                              <Slider fx:id="removeWallAnimationSpeed" blockIncrement="1.0" max="10.0" min="1.0" showTickLabels="true" />
+                              <Slider fx:id="removeWallAnimationSpeed" blockIncrement="1.0" max="20.0" min="1.0" showTickLabels="true" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label prefHeight="17.0" prefWidth="123.0" text="Fill Cell" />
-                              <Slider fx:id="fillCellAnimationSpeed" blockIncrement="1.0" max="10.0" min="1.0" showTickLabels="true" />
+                              <Slider fx:id="fillCellAnimationSpeed" blockIncrement="1.0" max="20.0" min="1.0" showTickLabels="true" />
                            </children>
                         </VBox>
                      </children>
