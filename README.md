@@ -1,2 +1,2 @@
 # Maze-Generator-and-Solver
- IN PROGRESS
+A desktop app that visualizes well-known graph algorithms by generating random mazes and solving the maze.
